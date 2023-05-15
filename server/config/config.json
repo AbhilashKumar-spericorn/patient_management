@@ -1,0 +1,40 @@
+{
+  "development": {
+    "database": {
+      "username": "postgres",
+      "password": "postgres",
+      "database": "patient_management",
+      "host": "192.168.1.216",
+      "dialect": "postgres",
+      "port": "5432",
+      "logging": false
+    },
+
+    "mail": {
+      "host": "smtp.gmail.com",
+      "service": "gmail",
+      "email": "abhilashkumar@spericorn.com",
+      "pass": "AbhiLash@20"
+    },
+    "secretPass": "XkhZG4fW2t2W"
+  },
+  "local": {
+    "database": {
+      "username": "postgres",
+      "password": "postgres",
+      "database": "patient_management",
+      "host": "192.168.1.216",
+      "dialect": "postgres",
+      "port": "5432",
+      "logging": false
+    },
+
+    "mail": {
+      "host": "smtp.gmail.com",
+      "service": "gmail",
+      "email": "abhilashkumar@spericorn.com",
+      "pass": "AbhiLash@20"
+    },
+    "secretPass": "XkhZG4fW2t2W"
+  }
+}
