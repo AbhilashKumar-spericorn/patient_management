@@ -5,6 +5,10 @@ import Registration from './authentication/Registration';
 import Dashboard from './Dashboard/Dashboard';
 import Messages from './Dashboard/Messages';
 import ReadMessage from './Dashboard/ReadMessage';
+import ReportOfDiseases from './Diseases/ReportOfDiseases';
+import AddDisease from './Diseases/AddDisease';
+import Consultation from './Consultations/Consultation';
+import ChangePassword from './Dashboard/ChangePassword';
 import { useDispatch,useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -52,6 +56,14 @@ const App = () => {
           <Route path="/register" element={<Registration />} />;
           <Route path="/dashboard" element={<Dashboard />} />;
           <Route path="/messages" element={<Messages />} />;
+          <Route path="/change-password" element={<ChangePassword />} />;
+          <Route path="/diseases" element={<ReportOfDiseases />} />;
+          <Route path="/add-disease" element={<AddDisease />} />;
+
+
+          <Route path="/consultation" element={<Consultation />} />;
+
+
           <Route
             path="/read-feedback/:id"
             element={

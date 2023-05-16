@@ -16,11 +16,11 @@ const Navbar = () => {
 
   const userRole = JSON.parse(localStorage.getItem('currentUser')).designation;
 
-//   const { grantedPermissions } = useSelector((state) => state.auth);
+  //   const { grantedPermissions } = useSelector((state) => state.auth);
 
-//   let array = grantedPermissions?.filter((item) => item.menu === 'Admin');
+  //   let array = grantedPermissions?.filter((item) => item.menu === 'Admin');
 
-//   let permissionAllowed = array?.map((e) => e.subMenu);
+  //   let permissionAllowed = array?.map((e) => e.subMenu);
 
   return (
     <div className="col-sm-auto bg-dark sticky-top">
@@ -57,11 +57,6 @@ const Navbar = () => {
               </button>
             </li>
             <li>
-              <Link className="dropdown-item" to={'/change-password'}>
-                change password
-              </Link>
-            </li>
-            <li>
               <Link className="dropdown-item" to={'/profile'}>
                 Profile
               </Link>
@@ -77,41 +72,37 @@ const Navbar = () => {
               <i className="bi-house fs-3"></i> Dashboard
             </Link>
           </li>
-          {userRole === 'Admin' ? (
-            <li className="nav-item my-1 ">
-              <Link
-                to={'/add-user'}
-                className="nav-link text-white fw-bold fs-4"
-              >
-                <i className="bi-person fs-3"></i> Add users
-              </Link>
-            </li>
-          ) : null}
 
           <li className="nav-item my-1 ">
-            <Link to={'/vaccinations'} className="nav-link text-white fw-bold fs-4">
+            <Link to={'/diseases'} className="nav-link text-white fw-bold fs-4">
+              <i className="bi-person fs-3"></i> diseases
+            </Link>
+          </li>
+
+          <li className="nav-item my-1 ">
+            <Link
+              to={'/vaccinations'}
+              className="nav-link text-white fw-bold fs-4"
+            >
               <i className="bi-truck fs-3"></i> vaccinations
             </Link>
           </li>
-          <li className="nav-item my-1">
-            <Link to={'/routes'} className="nav-link text-white fw-bold fs-4">
-              <i className="bi-speedometer2 fs-3"></i> Routes
-            </Link>
-          </li>
-          {userRole === 'Admin' ? (
-            <li className="nav-item my-1">
-              <Link
-                to={'/drivers'}
-                className="nav-link text-white fw-bold fs-4"
-              >
-                <i className="bi-people fs-3"></i> Driver
-              </Link>
-            </li>
-          ) : null}
 
           <li className="nav-item my-1">
-            <Link to={'/trips'} className="nav-link text-white fw-bold fs-4">
-              <i className="bi-speedometer2 fs-3"></i> Trips
+            <Link
+              to={'/consultation'}
+              className="nav-link text-white fw-bold fs-4"
+            >
+              <i className="bi-people fs-3"></i> Consultations
+            </Link>
+          </li>
+
+          <li className="nav-item my-1">
+            <Link
+              to={'/change-password'}
+              className="nav-link text-white fw-bold fs-4"
+            >
+              <i className="bi-speedometer2 fs-3"></i> change password
             </Link>
           </li>
           {userRole === 'Admin' ? (
@@ -135,8 +126,6 @@ const Navbar = () => {
               </Link>
             </li>
           ) : null}
-
-       
 
           {userRole === 'Admin' || userRole === 'Manager' ? (
             <li className="nav-item my-1">

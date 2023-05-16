@@ -8,8 +8,6 @@ import { setLogin } from './action';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 
-
-
 const LoginSchema = Yup.object().shape({
   // validating username
   email: Yup.string()
@@ -29,10 +27,8 @@ const Login = () => {
   const navigate = useNavigate();
   const { setLoading } = useSelector((state) => state.auth);
 
-
-
   return (
-      <section className="body">
+    <section className="body">
       <div className="container">
         <div className="login-box">
           <div className="row">
@@ -116,7 +112,6 @@ const Login = () => {
                       <button type="submit" className="btn btn-primary">
                         Login
                       </button>
-                   
 
                       <p className="small fw-bold mt-2 pt-1 mb-0">
                         Don't have an account?{' '}
@@ -134,7 +129,7 @@ const Login = () => {
         </div>
       </div>
     </section>
-  )
+  );
 };
 
 export default Login;

@@ -8,7 +8,6 @@ const authInitials = {
   role: '',
   usermail: '',
   userdata: {},
-
 };
 const authReducer = (state = authInitials, action) => {
   switch (action.type) {
@@ -40,7 +39,6 @@ const authReducer = (state = authInitials, action) => {
         ...state,
         userdata: action.payload,
       };
-  
 
     default:
       return state;
@@ -53,7 +51,6 @@ const msgInitials = {
   errorMsg: '',
   feedbacks: [],
   feedback: '',
-
 };
 
 const msgReducer = (state = msgInitials, action) => {
@@ -68,23 +65,21 @@ const msgReducer = (state = msgInitials, action) => {
         ...state,
         errorMsg: action.payload,
       };
-      case 'SET_USER_FEEDBACKS':
-        return {
-          ...state,
-          feedbacks: action.payload,
-        };
-        case 'SET_USER_FEEDBACK':
-            return {
-              ...state,
-              feedback: action.payload,
-            };
+    case 'SET_USER_FEEDBACKS':
+      return {
+        ...state,
+        feedbacks: action.payload,
+      };
+    case 'SET_USER_FEEDBACK':
+      return {
+        ...state,
+        feedback: action.payload,
+      };
 
     default:
       return state;
   }
 };
-
-
 
 //permission reducer
 const permissionInitials = {
@@ -121,12 +116,39 @@ const permissionReducer = (state = permissionInitials, action) => {
   }
 };
 
+// hospital reducer
+const hospitalInitials = {
+  hospitals: [],
+  doctors: [],
+  departments: [],
+};
 
+const hospitalReducer = (state = hospitalInitials, action) => {
+  switch (action.type) {
+    case 'SET_HOSPITALS':
+      return {
+        ...state,
+        hospital: action.payload,
+      };
+    case 'SET_DOCTORS':
+      return {
+        ...state,
+        doctors: action.payload,
+      };
+    case 'SET_DEPARTMENTS':
+      return {
+        ...state,
+        departments: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
 
 export default combineReducers({
   auth: authReducer,
   msg: msgReducer,
-
+  hospital: hospitalReducer,
   permissions: permissionReducer,
- 
 });

@@ -30,3 +30,17 @@ export const setLogin = (props, navigate) => async (dispatch) => {
     }
   });
 };
+
+
+//registration
+
+export const setRegistration = (props, navigate) => async (dispatch) => {
+  await postData('/auth/register', props).then((e) => {
+    if (e.data.success) {
+      dispatch(setSuccessMessage(e.data.message));
+     navigate();
+    } else {
+      dispatch(setErrorMessage(e.data.message));
+    }
+  });
+};

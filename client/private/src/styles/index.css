@@ -24,7 +24,11 @@ body {
   display: block;
 }
 
-
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 .navbar{
     /* background: linear-gradient(to right,#BE93C5 , #7BC6CC); */
