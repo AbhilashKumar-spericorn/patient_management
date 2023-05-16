@@ -19,12 +19,12 @@ export const setLogin = (props, navigate) => async (dispatch) => {
       );
       navigate();
       dispatch(setSuccessMessage(e.data.message));
-      console.log(e.data.data.permission);
-      dispatch({
-        type: 'GET_LOGIN',
-        payload: e.data.data.designation,
-        permission: e.data.data.permission,
-      });
+      // console.log(e.data.data.permission);
+      // dispatch({
+      //   type: 'GET_LOGIN',
+      //   payload: e.data.data.designation,
+      //   permission: e.data.data.permission,
+      // });
     } else {
       dispatch(setErrorMessage(e.data.message));
     }

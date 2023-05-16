@@ -34,7 +34,7 @@ const Navbar = () => {
           data-bs-original-title="Icon-only"
         >
           {' '}
-          GOGOX
+          CareCompass
           <i className="bi-truck fs-1"></i>
         </a>
         <div className="dropdown">

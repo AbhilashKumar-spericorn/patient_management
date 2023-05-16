@@ -193,115 +193,49 @@ cursor: pointer;
   font-size: 30px;
 }
 
-/* add truck */
-.get-in-touch {
-  max-width: 800px;
-  margin: 50px auto;
-  position: relative;
+/* registration form */
+@media (min-width: 1025px) {
+  .h-custom {
+  height: 100vh !important;
+  }
+  }
 
-}
-.get-in-touch .title {
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  font-size: 3.2em;
-  line-height: 48px;
-  padding-bottom: 48px;
-     color: #5543ca;
-    background: #5543ca;
-    background: -moz-linear-gradient(left,#f4524d  0%,#5543ca 100%) !important;
-    background: -webkit-linear-gradient(left,#f4524d  0%,#5543ca 100%) !important;
-    background: linear-gradient(to right,#f4524d  0%,#5543ca  100%) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-}
-
-.contact-form .form-field {
-  position: relative;
-  margin: 32px 0;
-}
-.contact-form .input-text {
-  display: block;
-  width: 100%;
-  height: 36px;
-  border-width: 0 0 2px 0;
-  border-color: #5543ca;
-  font-size: 18px;
-  line-height: 26px;
-  font-weight: 400;
-}
-.contact-form .input-text:focus {
-  outline: none;
-}
-.contact-form .input-text:focus + .label,
-.contact-form .input-text.not-empty + .label {
-  -webkit-transform: translateY(-24px);
-          transform: translateY(-24px);
-}
-.contact-form .label {
-  position: absolute;
-  left: 20px;
-  bottom: 11px;
-  font-size: 18px;
-  line-height: 26px;
-  font-weight: 400;
-  color: #5543ca;
-  cursor: text;
-  transition: -webkit-transform .2s ease-in-out;
-  transition: transform .2s ease-in-out;
-  transition: transform .2s ease-in-out, 
-  -webkit-transform .2s ease-in-out;
-}
-.contact-form .submit-btn {
-  display: inline-block;
-  background-color: #000;
-   background-image: linear-gradient(125deg,#a72879,#064497);
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-size: 16px;
-  padding: 8px 16px;
-  border: none;
-  width:200px;
-  cursor: pointer;
-}
-
-/* view driver
- */
-
- 
-.profile-button {
-  background: rgb(99, 39, 120);
-  box-shadow: none;
-  border: none
-}
-
-.profile-button:hover {
-  background: #682773
-}
-
-.profile-button:focus {
-  background: #682773;
-  box-shadow: none
-}
-
-.profile-button:active {
-  background: #682773;
-  box-shadow: none
-}
-
-.back:hover {
-  color: #682773;
-  cursor: pointer
-}
-
-.labels {
-  font-size: 19px
-}
-
-.add-experience:hover {
-  background: #BA68C8;
-  color: #fff;
-  cursor: pointer;
-  border: solid 1px #BA68C8
-}
+  .register-form {
+    background-color: #31c0ff;
+  }
+  .card-registration .select-input.form-control[readonly]:not([disabled]) {
+  font-size: 1rem;
+  line-height: 2.15;
+  padding-left: .75em;
+  padding-right: .75em;
+  }
+  .card-registration .select-arrow {
+  top: 13px;
+  }
+  
+  .gradient-custom-2 {
+  /* fallback for old browsers */
+  background: #a1c4fd;
+  
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(to right, rgba(161, 196, 253, 1), rgba(194, 233, 251, 1));
+  
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right, rgba(161, 196, 253, 1), rgba(194, 233, 251, 1))
+  }
+  
+  .bg-indigo {
+  background-color: #4835d4;
+  }
+  @media (min-width: 992px) {
+  .card-registration-2 .bg-indigo {
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  }
+  }
+  @media (max-width: 991px) {
+  .card-registration-2 .bg-indigo {
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  }
+  }

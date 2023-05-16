@@ -1,20 +1,9 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config//sequelize-config');
+const mongoose = require('mongoose');
 
-const hospital = sequelize.define('hospital', {
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: Sequelize.UUIDV4,
-    primaryKey: true,
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  hospitalId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
+const hospital = new mongoose.Schema({
+  hospitalName: { type: String, lowercase: true, trim: true, required: true },
+  place: { type: String, trim: true, required: true },
+  hospitalId: { type: Number, trim: true, required: true },
 });
 
-module.exports = hospital;
+module.exports = mongoose.model('hospital', hospital);

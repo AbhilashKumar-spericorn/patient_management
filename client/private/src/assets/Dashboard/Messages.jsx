@@ -58,7 +58,7 @@ const Messages = () => {
       selector: (row) => (
         <div>
           {' '}
-          <Link className="btn btn-info" to={`/read-feedback/${row.id}`}>
+          <Link className="btn btn-info" to={`/read-feedback/${row._id}`}>
             Read
           </Link>
           {/* <button

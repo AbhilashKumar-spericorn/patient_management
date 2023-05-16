@@ -1,75 +1,68 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/sequelize-config');
-const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 const jwt = require('jsonwebtoken');
-const { jwts } = require('../config');
+const bcrypt = require('bcrypt');
+require('dotenv').config();
 
-const login = sequelize.define(
-  'login',
+const login = new Schema(
   {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: Sequelize.UUIDV4,
-      primaryKey: true,
-    },
     email: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: String,
       unique: true,
+      required: true,
+      trim: true,
     },
     password: {
-      type: DataTypes.STRING,
-      allowNull: true,
+      type: String,
+      required: true,
+      trim: true,
     },
-    salt: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    role: {
-      type: DataTypes.ENUM('admin', 'patient'),
-      defaultValue: 'patient',
-      allowNull: true,
+    salt: String,
+    token: {
+      type: String,
+      required: false,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
-login.validatePassword = function (pass) {
-  return /^(?=.*\d).{8,}$/.test(pass);
-};
-login.generateSalt = async function () {
+
+login.statics.generateSalt = async () => {
   return await bcrypt.genSalt();
 };
-login.hashPassword = async function (pass, salt) {
+
+login.statics.hashPassword = async (pass, salt) => {
   return await bcrypt.hash(pass, salt);
 };
-login.verifyPassword = async function (pass, hash, salt) {
+
+login.statics.verifyPassword = async (pass, hash, salt) => {
+  console.log('pass', pass);
+  console.log('hash', hash);
   const hashPassword = await bcrypt.hash(pass, salt);
-  console.log(hashPassword);
-  console.log(hashPassword === hash);
-  if (hashPassword === hash) return true;
-  else return false;
+  // if (hashPassword === hash) return true;
+  // else return false;
+  return await bcrypt.compare(pass, hash);
 };
-login.generateAuthToken = function (data) {
+
+login.statics.generateAuthToken = (data) => {
   let expiresIn = expireIn(10);
   if (data.rememberMe) {
-    console.log('Entered---');
     expiresIn = expireIn(720);
   }
+
   return jwt.sign(
     {
-      id: data.id,
+      id: data._id,
       email: data.email,
-      validity: data.id.concat(data.email),
+      validity: data.password.concat(data._id).concat(data.email),
     },
-    jwts.secret_key,
+    'qwerty',
     { expiresIn }
   );
 };
+
 const expireIn = (numDays) => {
-  const dateObj = new Date();
-  return dateObj.setMinutes(dateObj.getMinutes() + numDays);
+  const dateObject = new Date();
+  return dateObject.setMinutes(dateObject.getMinutes() + numDays);
 };
 
-module.exports = login;
+module.exports = mongoose.model('login', login);

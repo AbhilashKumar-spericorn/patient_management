@@ -2,7 +2,7 @@ const contact = require('../../models/contact');
 const mail = require('../../modules/mail');
 
 exports.setContact = async (req, res, next) => {
-  // console.log('req', req.body);
+  console.log('req', req.body);
   try {
     req.body.status = 'unread';
     const data = await contact.create(req.body);
@@ -56,7 +56,7 @@ exports.setContact = async (req, res, next) => {
 // get all user messages
 exports.getUserMessages = async (req, res, next) => {
   try {
-    const data = await contact.findAll({});
+    const data = await contact.find();
     // console.log('vdata', data);
     res.send({
       success: true,
@@ -75,7 +75,7 @@ exports.getUserMessages = async (req, res, next) => {
 exports.getMsgToRead = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const feedback = await contact.findByPk(id);
+    const feedback = await contact.findById(id);
     res.send({
       success: true,
       message: 'marked as read',

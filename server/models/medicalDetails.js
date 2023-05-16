@@ -2,31 +2,38 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const { ObjectId } = Schema.Types;
 
-const consultation = new mongoose.Schema({
-  date: {
+const medicaldetails = new mongoose.Schema({
+  blood: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  height: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  weight: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+  gender: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+  diseaseName: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+  startedDate: {
     type: Date,
-    required: true,
-    trim: true,
-  },
-  hospitalId: {
-    type: ObjectId,
-    ref: 'hospital',
-    required: true,
-    trim: true,
-  },
-  departmentId: {
-    type: ObjectId,
-    ref: 'department',
     required: false,
     trim: true,
   },
-  doctorId: {
-    type: ObjectId,
-    ref: 'doctor',
-    required: false,
-    trim: true,
-  },
-  time: {
+  remarks: {
     type: String,
     required: false,
     trim: true,
@@ -39,4 +46,4 @@ const consultation = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('consultation', consultation);
+module.exports = mongoose.model('medicaldetails', medicaldetails);
