@@ -16,12 +16,12 @@ const Footer = () => {
   return (
     <div id="footer-wrapper" className="footerBg">
       <footer id="footer">
-        <div className="container">
-          <div className="row">
-            <ul className="col-md-3 col-sm-6 footer-widget-container">
+        <div className="container ">
+          <div className="row ">
+            <ul className="col-md-3 col-sm-6 footer-widget-container mt-3">
               <li className="widget widget_pages">
                 <div className="title">
-                  <h3> Transportation</h3>
+                  <h3 className='home-text2'> Transportation</h3>
                 </div>
 
                 <ul>
@@ -69,10 +69,10 @@ const Footer = () => {
               </li>
             </ul>
 
-            <ul className="col-md-3 col-sm-6 footer-widget-container">
+            <ul className="col-md-3 col-sm-6 footer-widget-container mt-3">
               <li className="widget widget_pages">
                 <div className="title">
-                  <h3>quick links</h3>
+                  <h3 className='home-text2'>quick links</h3>
                 </div>
 
                 <ul>
@@ -101,10 +101,10 @@ const Footer = () => {
               </li>
             </ul>
 
-            <ul className="col-md-3 col-sm-6 footer-widget-container">
+            <ul className="col-md-3 col-sm-6 footer-widget-container mt-3">
               <li className="widget widget_pages">
                 <div className="title">
-                  <h3>Services</h3>
+                  <h3 className='home-text2'>Services</h3>
                 </div>
 
                 <ul>
@@ -137,10 +137,10 @@ const Footer = () => {
               </li>
             </ul>
 
-            <ul className="col-md-3 col-sm-6 footer-widget-container">
+            <ul className="col-md-3 col-sm-6 footer-widget-container mt-3">
               <li className="widget widget-text">
                 <div className="title">
-                  <h3>contact us</h3>
+                  <h3 className='home-text2'>contact us</h3>
                 </div>
 
                 <span className="text-big">+91 11 49090585/86/87/88</span>

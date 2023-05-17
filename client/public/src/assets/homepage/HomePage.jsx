@@ -1,6 +1,8 @@
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import VerifyVaccine from './VerifyVaccine';
+import VerifyConsultation from './VerifyConsultation';
 import Testimonial from './Testimonial';
 import Services from './Services';
 import ContactUs from './ContactUs';
@@ -38,6 +40,8 @@ const HomePage = () => {
           <Carousel.Caption></Carousel.Caption>
         </Carousel.Item>
       </Carousel>
+      <VerifyVaccine/>
+      <VerifyConsultation/>
       <Testimonial />
       <Services/>
       <ContactUs/>

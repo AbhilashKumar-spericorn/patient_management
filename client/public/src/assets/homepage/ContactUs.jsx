@@ -40,7 +40,7 @@ const ContactUs = () => {
               // margin: '2% 0% 0% 25%',
             }}
           >
-            <h1>Submit your feedback</h1>
+            <h1 className='home-text'>Submit your feedback</h1>
 
             <label htmlFor="name">
               <b>Name</b>

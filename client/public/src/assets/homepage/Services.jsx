@@ -6,7 +6,7 @@ const Services = () => {
       <div className="row justify-content-center">
         <div className="col-12">
           <div className="section-title text-center mb-4 pb-2">
-            <h4 className="title mb-4">Our Services</h4>
+            <h4 className="home-text mb-4">Our Services</h4>
             <p className="text-muted para-desc mx-auto mb-0">
               There is now an abundance of readable dummy texts. These are
               usually used when a text is required purely to fill a space.

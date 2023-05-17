@@ -2,10 +2,10 @@ import React from 'react';
 
 const Testimonial = () => {
   return (
-    <section className='mt-3 mb-3'>
+    <section className='mt-5 mb-3'>
       <div className="row d-flex justify-content-center mx-3">
         <div className="col-md-10 col-xl-8 text-center">
-          <h3 className="mb-4">Testimonials</h3>
+          <h3 className="mb-4 home-text">Testimonials</h3>
           <p className="mb-4 pb-2 mb-md-5 pb-md-0">
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit,
             error amet numquam iure provident voluptate esse quasi, veritatis

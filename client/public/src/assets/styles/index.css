@@ -25,6 +25,24 @@ body {
   display: block;
 }
 
+.home-text {
+  font-size: 40px;
+  font-weight: 600;
+  background-image: linear-gradient(to left, #553c9a, #b393d3);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.home-text2 {
+  font-size: 30px;
+  font-weight: 600;
+  background-image: linear-gradient(to left, #c8ca44, #40c812);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
 .navbar{
     /* background: linear-gradient(to right,#BE93C5 , #7BC6CC); */
     /* background-color: #254058; */
@@ -32,7 +50,7 @@ body {
     padding: 1.5%;
 }
 .footerBg {
-  background-image: linear-gradient(to right bottom, #dee3e8, #354658, #bcbfc2, #030713, #4b4243);
+  background-image: linear-gradient(to right bottom, #1477db, #2171c6, #2379d0, #030713, #5c363b);
 }
 
 /* admin login page */

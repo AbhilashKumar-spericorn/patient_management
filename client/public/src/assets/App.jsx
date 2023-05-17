@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import HomePage from './homepage/HomePage';
 import ContactUs from './homepage/ContactUs';
 import VerifyVaccine from './homepage/VerifyVaccine';
-import VerifyConsulation from './homepage/VerifyConsulation';
+import VerifyConsultation from './homepage/VerifyConsultation';
 import './styles/index.css'
 
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
@@ -47,7 +47,7 @@ const App = () => {
           <Route path="/" element={<HomePage />} />;
           <Route path="/contact-us" element={<ContactUs />} />;
           <Route path="/verify-vaccine" element={<VerifyVaccine />} />;
-          <Route path="/verify-consultation" element={<VerifyConsulation />} />;
+          <Route path="/verify-consultation" element={<VerifyConsultation />} />;
 
 
         
