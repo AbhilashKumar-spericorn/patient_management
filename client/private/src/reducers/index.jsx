@@ -7,7 +7,7 @@ const authInitials = {
   grantedPermissions: [],
   role: '',
   usermail: '',
-  userdata: {},
+  userdata: [],
 };
 const authReducer = (state = authInitials, action) => {
   switch (action.type) {

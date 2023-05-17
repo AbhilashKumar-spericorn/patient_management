@@ -37,27 +37,7 @@ const Navbar = () => {
           CareCompass
           <i className="bi-truck fs-1"></i>
         </a>
-        <div className="dropdown">
-          <a
-            href="#"
-            className="d-flex align-items-center justify-content-center p-3 link-white text-decoration-none dropdown-toggle"
-            id="dropdownUser3"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="bi-person-circle h2"></i>
-          </a>
-          <ul
-            className="dropdown-menu text-small shadow"
-            aria-labelledby="dropdownUser3"
-          >
-            <li>
-              <button className="btn btn-white mx-2" onClick={logout}>
-                Logout
-              </button>
-            </li>
-          </ul>
-        </div>
+    
         <ul className="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto ">
           <li className="nav-item my-1">
             <Link
@@ -137,6 +117,11 @@ const Navbar = () => {
               </Link>
             </li>
           ) : null}
+          <li className="nav-item my-1">
+            <button className="nav-link text-white fw-bold fs-4" onClick={logout}>
+              Logout
+            </button>
+          </li>
         </ul>
       </div>
     </div>

@@ -44,7 +44,6 @@ export const setLogout = (navigate) => async (dispatch) => {
   // await service.userLogout();
 };
 
-
 //change-password
 export const changePass = (props) => async (dispatch) => {
   const { data } = await postData('/profile/change-password', props);
@@ -54,7 +53,6 @@ export const changePass = (props) => async (dispatch) => {
     dispatch(setErrorMessage(data.message));
   }
 };
-
 
 //to fetch feedbacks
 export const fetchFeedbacks = (id) => async (dispatch) => {
@@ -70,7 +68,6 @@ export const fetchFeedbacks = (id) => async (dispatch) => {
   }
 };
 
-
 //to fetch feedbacks
 export const readMessage = (id) => async (dispatch) => {
   const { data } = await getData(`/contact/feedback/${id}`);
@@ -78,6 +75,20 @@ export const readMessage = (id) => async (dispatch) => {
   if (data.success) {
     dispatch({
       type: 'SET_USER_FEEDBACK',
+      payload: data.data,
+    });
+    // dispatch(setSuccessMessage(data.message));
+  } else {
+    dispatch(setErrorMessage(data.message));
+  }
+};
+
+//get user profile
+export const getUserProfile = () => async (dispatch) => {
+  const { data } = await getData('profile/data');
+  if (data.success) {
+    dispatch({
+      type: 'SET_USERDATA',
       payload: data.data,
     });
     // dispatch(setSuccessMessage(data.message));

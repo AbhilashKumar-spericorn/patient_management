@@ -88,3 +88,56 @@ exports.reportDisease = async (req, res) => {
     });
   }
 };
+
+// get user profile
+exports.viewProfile = async (req, res) => {
+  console.log('req.user', req.user);
+  let who = await login.findById(req.user.id);
+  const data = await signup.aggregate([
+    {
+      $lookup: {
+        from: 'logins',
+        localField: 'loginId',
+        foreignField: '_id',
+        as: 'login_info',
+      },
+    },
+    // {
+    //   $unwind: {
+    //     path: '$login_info',
+    //     preserveNullAndEmptyArrays: true,
+    //   },
+    // },
+    {
+      $lookup: {
+        from: 'medicaldetails',
+        localField: 'loginId',
+        foreignField: 'loginId',
+        as: 'medical_info',
+      },
+    },
+    {
+      $unwind: {
+        path: '$medical_info',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $match: {
+        loginId: who._id,
+      },
+    },
+  ]);
+  console.log('data', data);
+  res.send({
+    success: true,
+    data: data,
+  });
+  try {
+  } catch (e) {
+    res.send({
+      success: false,
+      message: e.message,
+    });
+  }
+};

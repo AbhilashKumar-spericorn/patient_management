@@ -3,6 +3,7 @@ import Home from './home/Home';
 import Login from './authentication/Login';
 import Registration from './authentication/Registration';
 import Dashboard from './Dashboard/Dashboard';
+import Profile from './Dashboard/Profile';
 import Messages from './Dashboard/Messages';
 import ReadMessage from './Dashboard/ReadMessage';
 import ReportOfDiseases from './Diseases/ReportOfDiseases';
@@ -54,6 +55,8 @@ const App = () => {
           <Route path="/login" element={<Login />} />;
           <Route path="/register" element={<Registration />} />;
           <Route path="/dashboard" element={<Dashboard />} />;
+          <Route path="/profile" element={<Profile />} />;
+
           <Route path="/messages" element={<Messages />} />;
           <Route path="/change-password" element={<ChangePassword />} />;
           <Route path="/diseases" element={<ReportOfDiseases />} />;
