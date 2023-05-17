@@ -121,6 +121,8 @@ const hospitalInitials = {
   hospitals: [],
   doctors: [],
   departments: [],
+  Diseases:[],
+  report :[]
 };
 
 const hospitalReducer = (state = hospitalInitials, action) => {
@@ -140,6 +142,16 @@ const hospitalReducer = (state = hospitalInitials, action) => {
         ...state,
         departments: action.payload,
       };
+      case 'SET_DISEASES':
+        return {
+          ...state,
+          Diseases: action.payload,
+        };
+        case 'SET_DISEASES_REPORT':
+          return {
+            ...state,
+            report: action.payload,
+          };
 
     default:
       return state;

@@ -1,5 +1,7 @@
 const login = require('../../models/login');
 const signup = require('../../models/signup');
+const medicalDetails = require('../../models/medicalDetails');
+const jwt = require('jsonwebtoken');
 
 //change password
 
@@ -47,6 +49,42 @@ exports.changePassword = async (req, res) => {
     res.send({
       success: true,
       message: 'password changed successfully',
+    });
+  }
+};
+
+//report disease
+exports.reportDisease = async (req, res) => {
+  try {
+    console.log('req.body', req.body);
+    const token = req.header('Authorization')
+      ? req.header('Authorization').replace('Bearer ', '')
+      : null;
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    let who = await login.findById(decoded.id);
+    console.log('who', who);
+    const med = await medicalDetails.findOne({ loginId: who._id });
+    console.log('med', med);
+
+    const mappedArray = req.body.diseases.map((item) => {
+      return {
+        diseaseName: item.name,
+        startDate: new Date(item.startDate),
+        remarks: item.remarks,
+      };
+    });
+
+    await med.updateOne({ diseases: mappedArray });
+
+    res.send({
+      success: true,
+      message: 'success',
+    });
+  } catch (e) {
+    res.send({
+      success: false,
+      message: e.message,
     });
   }
 };

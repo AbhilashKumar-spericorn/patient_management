@@ -1,7 +1,7 @@
 const login = require('../../models/login');
 const signup = require('../../models/signup');
 const transporter = require('../../modules/mail');
-const medicaldetails = require('../../models/medicalDetails')
+const medicaldetails = require('../../models/medicalDetails');
 
 exports.Login = async (req, res, next) => {
   try {
@@ -94,27 +94,28 @@ exports.Registration = async (req, res) => {
         role: 'Patient',
         loginId: log.id,
       });
+
+      const medical = await medicaldetails.create({
+        blood: req.body.blood,
+        height: req.body.height,
+        weight: req.body.weight,
+        gender: req.body.gender,
+        loginId: log.id,
+      });
+
+      let mailOptions = {
+        to: req.body.email,
+        subject: 'Successfully Registered',
+        text: `Your username is ${req.body.name} is registered successfully`,
+      };
+
+      const info = await transporter.sendMail(mailOptions);
+
+      res.send({
+        success: true,
+        message: 'success',
+      });
     }
-
-    const medical = await medicaldetails.create({
-      blood : req.body.blood,
-      height:req.body.height,
-      weight: req.body.weight,
-      gender:req.body.gender
-    })
-
-    let mailOptions = {
-      to: req.body.email,
-      subject: 'Successfully Registered',
-      text: `Your username is ${req.body.name} is registered successfully`
-    };
-
-    const info = await transporter.sendMail(mailOptions);
-
-    res.send({
-      success: true,
-      message: 'success',
-    });
   } catch (e) {
     res.send({
       success: false,

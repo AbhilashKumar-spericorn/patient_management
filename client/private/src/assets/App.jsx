@@ -8,13 +8,15 @@ import ReadMessage from './Dashboard/ReadMessage';
 import ReportOfDiseases from './Diseases/ReportOfDiseases';
 import AddDisease from './Diseases/AddDisease';
 import Consultation from './Consultations/Consultation';
+import RegisterConsultations from './Consultations/RegisterConsultations';
 import ChangePassword from './Dashboard/ChangePassword';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { resetErrorMessage,resetSuccessMessage } from '../actions';
+import { resetErrorMessage, resetSuccessMessage } from '../actions';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import '../styles/index.css'
+import { PrivateRoute } from './PrivateRouting';
+import '../styles/index.css';
 
 const toastConfig = {
   position: 'top-right',
@@ -27,13 +29,10 @@ const toastConfig = {
   theme: 'dark',
 };
 
-
-
 const App = () => {
   const dispatch = useDispatch();
   const { role } = useSelector((e) => e.auth);
   const { successMsg, errorMsg } = useSelector((e) => e.msg);
-
 
   useEffect(() => {
     if (successMsg) {
@@ -59,32 +58,8 @@ const App = () => {
           <Route path="/change-password" element={<ChangePassword />} />;
           <Route path="/diseases" element={<ReportOfDiseases />} />;
           <Route path="/add-disease" element={<AddDisease />} />;
-
-
           <Route path="/consultation" element={<Consultation />} />;
-
-
-          <Route
-            path="/read-feedback/:id"
-            element={
-            //   <PrivateRoute>
-                <ReadMessage />
-            //   </PrivateRoute>
-            }
-          />
-
-
-
-          
-          {/* <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          /> */}
-      
+          <Route path="/read-feedback/:id" element={<ReadMessage />} />
         </Routes>
       </BrowserRouter>
     </div>

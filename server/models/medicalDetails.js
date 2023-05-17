@@ -23,21 +23,26 @@ const medicaldetails = new mongoose.Schema({
     required: false,
     trim: true,
   },
-  diseaseName: {
-    type: String,
-    required: false,
-    trim: true,
-  },
-  startedDate: {
-    type: Date,
-    required: false,
-    trim: true,
-  },
-  remarks: {
-    type: String,
-    required: false,
-    trim: true,
-  },
+  diseases: [
+    {
+      diseaseName: {
+        type: ObjectId,
+        ref: 'disease',
+        required: false,
+        trim: true,
+      },
+      startDate: {
+        type: Date,
+        required: false,
+        trim: true,
+      },
+      remarks: {
+        type: String,
+        required: false,
+        trim: true,
+      },
+    },
+  ],
   loginId: {
     type: ObjectId,
     ref: 'login',

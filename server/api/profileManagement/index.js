@@ -6,4 +6,6 @@ const controller = require('./controller');
 
 router.route('/change-password').post(controller.changePassword);
 
+router.route('/report-disease').post(controller.reportDisease);
+
 module.exports = router;

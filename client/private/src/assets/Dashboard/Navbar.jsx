@@ -56,11 +56,6 @@ const Navbar = () => {
                 Logout
               </button>
             </li>
-            <li>
-              <Link className="dropdown-item" to={'/profile'}>
-                Profile
-              </Link>
-            </li>
           </ul>
         </div>
         <ul className="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto ">
@@ -70,6 +65,11 @@ const Navbar = () => {
               className="nav-link text-white fw-bold fs-4"
             >
               <i className="bi-house fs-3"></i> Dashboard
+            </Link>
+          </li>
+          <li className="nav-item my-1">
+            <Link to={'/profile'} className="nav-link text-white fw-bold fs-4">
+              <i className="bi-house fs-3"></i> Profile
             </Link>
           </li>
 

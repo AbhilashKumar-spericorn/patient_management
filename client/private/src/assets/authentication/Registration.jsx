@@ -87,9 +87,7 @@ const Registration = () => {
                   onSubmit={(values, { resetForm }) => {
                     // resetForm({ values: '' });
                     console.log('values', values);
-                    dispatch(
-                      setRegistration(values, () => navigate('/login'))
-                    );
+                    dispatch(setRegistration(values, () => navigate('/login')));
                   }}
                 >
                   {({
@@ -365,6 +363,12 @@ const Registration = () => {
                             >
                               Register
                             </button>
+                            <a
+                              href="http://localhost:3000"
+                              className="btn btn-info mx-3"
+                            >
+                              back
+                            </a>
                           </div>
                         </div>
                         <div className="col-lg-6 bg-indigo text-white">
