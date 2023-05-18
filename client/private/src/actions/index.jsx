@@ -96,3 +96,57 @@ export const getUserProfile = () => async (dispatch) => {
     dispatch(setErrorMessage(data.message));
   }
 };
+
+//get basic data
+export const getBasicProfile = () => async (dispatch) => {
+  const { data } = await getData('profile/basic-data');
+  if (data.success) {
+    dispatch({
+      type: 'SET_BASICDATA',
+      payload: data.data,
+    });
+    // dispatch(setSuccessMessage(data.message));
+  } else {
+    dispatch(setErrorMessage(data.message));
+  }
+};
+
+//update basic profile
+
+export const UpdateBasicProfile = (props) => async (dispatch) => {
+  const { data } = await updateData('profile/basic-data', props);
+  if (data.success) {
+    dispatch(setSuccessMessage(data.message));
+    dispatch(getUserProfile());
+  } else {
+    dispatch(setErrorMessage(data.message));
+  }
+};
+
+
+//get medical data
+export const getMedicalProfile = () => async (dispatch) => {
+  const { data } = await getData('profile/med-data');
+  if (data.success) {
+    dispatch({
+      type: 'SET_MEDICALDATA',
+      payload: data.data,
+    });
+    // dispatch(setSuccessMessage(data.message));
+  } else {
+    dispatch(setErrorMessage(data.message));
+  }
+};
+
+
+//update medical info
+
+export const UpdateMedInfo = (props,navigate) => async (dispatch) => {
+  const { data } = await updateData('profile/med-data', props);
+  if (data.success) {
+    dispatch(setSuccessMessage(data.message));
+    navigate()
+  } else {
+    dispatch(setErrorMessage(data.message));
+  }
+};

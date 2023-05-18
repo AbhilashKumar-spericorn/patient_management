@@ -6,6 +6,7 @@ import Dashboard from './Dashboard/Dashboard';
 import Profile from './Dashboard/Profile';
 import Messages from './Dashboard/Messages';
 import ReadMessage from './Dashboard/ReadMessage';
+import EditMedInfo from './Dashboard/EditMedInfo';
 import ReportOfDiseases from './Diseases/ReportOfDiseases';
 import AddDisease from './Diseases/AddDisease';
 import Consultation from './Consultations/Consultation';
@@ -56,6 +57,7 @@ const App = () => {
           <Route path="/register" element={<Registration />} />;
           <Route path="/dashboard" element={<Dashboard />} />;
           <Route path="/profile" element={<Profile />} />;
+          <Route path="/edit-medicalinfo" element={<EditMedInfo />} />;
 
           <Route path="/messages" element={<Messages />} />;
           <Route path="/change-password" element={<ChangePassword />} />;

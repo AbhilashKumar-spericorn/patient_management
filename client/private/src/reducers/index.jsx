@@ -8,6 +8,8 @@ const authInitials = {
   role: '',
   usermail: '',
   userdata: [],
+  basicData: [],
+  medicalData: [],
 };
 const authReducer = (state = authInitials, action) => {
   switch (action.type) {
@@ -38,6 +40,16 @@ const authReducer = (state = authInitials, action) => {
       return {
         ...state,
         userdata: action.payload,
+      };
+    case 'SET_BASICDATA':
+      return {
+        ...state,
+        basicData: action.payload,
+      };
+    case 'SET_MEDICALDATA':
+      return {
+        ...state,
+        medicalData: action.payload,
       };
 
     default:
@@ -121,8 +133,8 @@ const hospitalInitials = {
   hospitals: [],
   doctors: [],
   departments: [],
-  Diseases:[],
-  report :[]
+  Diseases: [],
+  report: [],
 };
 
 const hospitalReducer = (state = hospitalInitials, action) => {
@@ -142,16 +154,16 @@ const hospitalReducer = (state = hospitalInitials, action) => {
         ...state,
         departments: action.payload,
       };
-      case 'SET_DISEASES':
-        return {
-          ...state,
-          Diseases: action.payload,
-        };
-        case 'SET_DISEASES_REPORT':
-          return {
-            ...state,
-            report: action.payload,
-          };
+    case 'SET_DISEASES':
+      return {
+        ...state,
+        Diseases: action.payload,
+      };
+    case 'SET_DISEASES_REPORT':
+      return {
+        ...state,
+        report: action.payload,
+      };
 
     default:
       return state;

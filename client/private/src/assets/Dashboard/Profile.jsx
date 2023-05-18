@@ -2,7 +2,18 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Dashboard/Navbar';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserProfile } from '../../actions';
+import {
+  getUserProfile,
+  getBasicProfile,
+  UpdateBasicProfile,
+} from '../../actions';
+import { useFormik } from 'formik';
+import Modal from 'react-modal';
+import * as Yup from 'yup';
+import moment from 'moment';
+
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -10,8 +21,67 @@ const Profile = () => {
     dispatch(getUserProfile());
   }, []);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  useEffect(() => {
+    dispatch(getBasicProfile());
+  }, [isModalOpen]);
+
+  const { basicData } = useSelector((e) => e.auth);
+
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+    setIsReadOnly(true);
+  };
+
+  const [isReadOnly, setIsReadOnly] = useState(false);
+
+  const {
+    handleSubmit,
+    handleChange,
+    handleBlur,
+    touched,
+    values,
+    errors,
+    resetForm,
+  } = useFormik({
+    validationSchema: Yup.object().shape({
+      name: Yup.string().required('Name is required'),
+      aadharNo: Yup.string()
+        .required('Aadhar number is required.')
+        .matches(/^\d{12}$/, 'Invalid Aadhar number.'),
+      phoneNumber: Yup.string()
+        .matches(phoneRegExp, 'Phone number is not valid')
+        .required('phone no is Required'),
+      email: Yup.string().email('Invalid email').required('Email is required'),
+      country: Yup.string().required('Country is required'),
+      dob: Yup.date()
+        .required('Date of birth is required')
+        .max(new Date(), 'Date of birth cannot be in the future.'),
+      pinCode: Yup.string().required('PIN code is required'),
+      state: Yup.string().required('State is required'),
+    }),
+    enableReinitialize: true,
+    // initial values
+    initialValues: {
+      name: basicData ? basicData?.name : null,
+      aadharNo: basicData ? basicData?.aadharNo : null,
+      phoneNumber: basicData ? basicData?.phoneNumber : null,
+      email: basicData ? basicData?.loginId?.email : null,
+      country: basicData ? basicData?.country : null,
+      dob: basicData ? moment(basicData?.dob).format('YYYY-MM-DD') : null,
+      pinCode: basicData ? basicData?.pinCode : null,
+      state: basicData ? basicData?.state : null,
+    },
+    onSubmit: (values, { resetForm }) => {
+      resetForm({ values: '' });
+      console.log('values', values);
+      dispatch(UpdateBasicProfile(values));
+      setIsModalOpen(!isModalOpen);
+    },
+  });
+
   const { userdata } = useSelector((e) => e.auth);
-  console.log(userdata);
 
   const details = userdata?.map((e) => {
     return (
@@ -27,129 +97,10 @@ const Profile = () => {
                   width="110"
                 />
                 <div className="mt-3">
-                  <h4>{e?.medical_info.name}</h4>
-                  <p className="text-secondary mb-1">Full Stack Developer</p>
-                  <p className="text-muted font-size-sm">
-                    Bay Area, San Francisco, CA
-                  </p>
-                  <button className="btn btn-primary">Follow</button>
-                  <button className="btn btn-outline-primary">Message</button>
+                  <h4>{e?.name}</h4>
                 </div>
               </div>
               <hr className="my-4" />
-              <ul className="list-group list-group-flush">
-                <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                  <h6 className="mb-0">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      className="feather feather-globe me-2 icon-inline"
-                    >
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <line x1="2" y1="12" x2="22" y2="12"></line>
-                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                    </svg>
-                    Website
-                  </h6>
-                  <span className="text-secondary">https://bootdey.com</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                  <h6 className="mb-0">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      className="feather feather-github me-2 icon-inline"
-                    >
-                      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-                    </svg>
-                    Github
-                  </h6>
-                  <span className="text-secondary">bootdey</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                  <h6 className="mb-0">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      className="feather feather-twitter me-2 icon-inline text-info"
-                    >
-                      <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
-                    </svg>
-                    Twitter
-                  </h6>
-                  <span className="text-secondary">@bootdey</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                  <h6 className="mb-0">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      className="feather feather-instagram me-2 icon-inline text-danger"
-                    >
-                      <rect
-                        x="2"
-                        y="2"
-                        width="20"
-                        height="20"
-                        rx="5"
-                        ry="5"
-                      ></rect>
-                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                    </svg>
-                    Instagram
-                  </h6>
-                  <span className="text-secondary">bootdey</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                  <h6 className="mb-0">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      className="feather feather-facebook me-2 icon-inline text-primary"
-                    >
-                      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                    </svg>
-                    Facebook
-                  </h6>
-                  <span className="text-secondary">bootdey</span>
-                </li>
-              </ul>
             </div>
           </div>
         </div>
@@ -161,10 +112,30 @@ const Profile = () => {
                   <h6 className="mb-0">Full Name</h6>
                 </div>
                 <div className="col-sm-9 text-secondary">
+                  <input type="text" className="form-control" value={e?.name} />
+                </div>
+              </div>
+              <div className="row mb-3">
+                <div className="col-sm-3">
+                  <h6 className="mb-0">Aadhar No</h6>
+                </div>
+                <div className="col-sm-9 text-secondary">
                   <input
                     type="text"
                     className="form-control"
-                    value="John Doe"
+                    value={e?.aadharNo}
+                  />
+                </div>
+              </div>
+              <div className="row mb-3">
+                <div className="col-sm-3">
+                  <h6 className="mb-0">Date of Birth</h6>
+                </div>
+                <div className="col-sm-9 text-secondary">
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={moment(e?.dob).format('YYYY-MM-DD')}
                   />
                 </div>
               </div>
@@ -176,7 +147,7 @@ const Profile = () => {
                   <input
                     type="text"
                     className="form-control"
-                    value="john@example.com"
+                    value={e?.login_info?.email}
                   />
                 </div>
               </div>
@@ -188,42 +159,52 @@ const Profile = () => {
                   <input
                     type="text"
                     className="form-control"
-                    value="(239) 816-9029"
+                    value={e?.phoneNumber}
                   />
                 </div>
               </div>
               <div className="row mb-3">
                 <div className="col-sm-3">
-                  <h6 className="mb-0">Mobile</h6>
+                  <h6 className="mb-0">country</h6>
                 </div>
                 <div className="col-sm-9 text-secondary">
                   <input
                     type="text"
                     className="form-control"
-                    value="(320) 380-4539"
+                    value={e?.country}
                   />
                 </div>
               </div>
               <div className="row mb-3">
                 <div className="col-sm-3">
-                  <h6 className="mb-0">Address</h6>
+                  <h6 className="mb-0">State</h6>
                 </div>
                 <div className="col-sm-9 text-secondary">
                   <input
                     type="text"
                     className="form-control"
-                    value="Bay Area, San Francisco, CA"
+                    value={e?.state}
+                  />
+                </div>
+              </div>
+              <div className="row mb-3">
+                <div className="col-sm-3">
+                  <h6 className="mb-0">pincode</h6>
+                </div>
+                <div className="col-sm-9 text-secondary">
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={e?.pinCode}
                   />
                 </div>
               </div>
               <div className="row">
                 <div className="col-sm-3"></div>
                 <div className="col-sm-9 text-secondary">
-                  <input
-                    type="button"
-                    className="btn btn-primary px-4"
-                    value="Save Changes"
-                  />
+                  <button className="btn btn-primary" onClick={toggleModal}>
+                    Edit data
+                  </button>
                 </div>
               </div>
             </div>
@@ -233,63 +214,21 @@ const Profile = () => {
               <div className="card">
                 <div className="card-body">
                   <h5 className="d-flex align-items-center mb-3">
-                    Project Status
+                    Medical info
                   </h5>
-                  <p>Web Design</p>
-                  <div className="progress mb-3" style={{ height: '5px' }}>
-                    <div
-                      className="progress-bar bg-primary"
-                      role="progressbar"
-                      style={{ width: '80%' }}
-                      aria-valuenow="80"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    ></div>
-                  </div>
-                  <p>Website Markup</p>
-                  <div className="progress mb-3" style={{ height: '5px' }}>
-                    <div
-                      className="progress-bar bg-danger"
-                      role="progressbar"
-                      style={{ width: '72%' }}
-                      aria-valuenow="72"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    ></div>
-                  </div>
-                  <p>One Page</p>
-                  <div className="progress mb-3" style={{ height: '5px' }}>
-                    <div
-                      className="progress-bar bg-success"
-                      role="progressbar"
-                      style={{ width: '89%' }}
-                      aria-valuenow="89"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    ></div>
-                  </div>
-                  <p>Mobile Template</p>
-                  <div className="progress mb-3" style={{ height: '5px' }}>
-                    <div
-                      className="progress-bar bg-warning"
-                      role="progressbar"
-                      style={{ width: '55%' }}
-                      aria-valuenow="55"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    ></div>
-                  </div>
-                  <p>Backend API</p>
-                  <div className="progress" style={{ height: '5px' }}>
-                    <div
-                      className="progress-bar bg-info"
-                      role="progressbar"
-                      style={{ width: '66%' }}
-                      aria-valuenow="66"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    ></div>
-                  </div>
+                  <p style={{ fontSize: '20px' }}>Blood group</p>
+                  <p>{e?.medical_info?.blood}</p>
+                  <p style={{ fontSize: '20px' }}>Height </p>
+                  <p>{e?.medical_info?.height}cm</p>
+
+                  <p style={{ fontSize: '20px' }}>Weight </p>
+                  <p>{e?.medical_info?.weight}kg</p>
+
+                  <p style={{ fontSize: '20px' }}>Gender </p>
+                  <p>{e?.medical_info?.gender}</p>
+                  <Link className="btn btn-primary" to={'/edit-medicalinfo'} >
+                    Edit data
+                  </Link>
                 </div>
               </div>
             </div>
@@ -305,12 +244,210 @@ const Profile = () => {
         <Navbar />
         <div className="col-sm p-3 min-vh-100">
           <div className="container">
-            <div className="main-body">
-              {details}
-            </div>
+            <div className="main-body">{details}</div>
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={toggleModal}
+        shouldCloseOnOverlayClick={false} // Prevent closing on overlay click
+        shouldCloseOnEsc={false} // Prevent closing on Esc key
+        contentLabel="Register Modal"
+        className="custom-modal" // Add a custom class for the modal
+        overlayClassName="custom-modal-overlay" // Add a custom class for the modal overlay
+      >
+        <div className="container">
+          <form onSubmit={handleSubmit}>
+            <div className="card">
+              <div className="card-body">
+                <div className="row mb-3">
+                  <div className="form-outline form-white">
+                    <label htmlFor="first_name" style={{ fontWeight: '700' }}>
+                      Enter Your name
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="name"
+                      name="name"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.name}
+                      placeholder="Enter Your name"
+                    />
+
+                    {errors.name && touched.name ? (
+                      <div>{errors.name}</div>
+                    ) : null}
+                  </div>
+                </div>
+                <div className="row mb-3">
+                  <div className="form-outline form-white">
+                    <label htmlFor="first_name" style={{ fontWeight: '700' }}>
+                      Enter Your aadhar No
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      id="aadharNo"
+                      name="aadharNo"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.aadharNo}
+                      placeholder="Enter Your aadharNo"
+                    />
+
+                    {errors.aadharNo && touched.aadharNo ? (
+                      <div>{errors.aadharNo}</div>
+                    ) : null}
+                  </div>
+                </div>
+                <div className="d-flex mb-3 ">
+                  <div className="form-outline form-white mx-2">
+                    <label htmlFor="phoneNumber" style={{ fontWeight: '700' }}>
+                      phone number
+                    </label>
+                    <input
+                      type="text"
+                      id="phoneNumber"
+                      name="phoneNumber"
+                      className="form-control"
+                      placeholder="phone number"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.phoneNumber}
+                    />
+                    {errors.phoneNumber && touched.phoneNumber ? (
+                      <div>{errors.phoneNumber}</div>
+                    ) : null}
+                  </div>{' '}
+                  <div className="form-outline form-white">
+                    <label htmlFor="email" style={{ fontWeight: '700' }}>
+                      dob
+                    </label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      id="dob"
+                      name="dob"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.dob}
+                      placeholder="Enter Your dob"
+                    />
+
+                    {errors.dob && touched.dob ? <div>{errors.dob}</div> : null}
+                  </div>
+                </div>
+                <div className="row mb-3"></div>
+                <div className="row mb-3">
+                  <div className="form-outline form-white">
+                    <label htmlFor="email" style={{ fontWeight: '700' }}>
+                      email
+                    </label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="email"
+                      name="email"
+                      readOnly={isReadOnly}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.email}
+                      placeholder="Enter Your email"
+                    />
+
+                    {errors.email && touched.email ? (
+                      <div>{errors.email}</div>
+                    ) : null}
+                  </div>
+                </div>
+                <div className="d-flex flex-row mb-3">
+                  <div className="form-outline form-white mx-2">
+                    <label htmlFor="email" style={{ fontWeight: '700' }}>
+                      country
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="country"
+                      name="country"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.country}
+                      placeholder="Enter Your country"
+                    />
+
+                    {errors.country && touched.country ? (
+                      <div>{errors.country}</div>
+                    ) : null}
+                  </div>
+                  <div className="form-outline form-white">
+                    <label htmlFor="email" style={{ fontWeight: '700' }}>
+                      state
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="state"
+                      name="state"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.state}
+                      placeholder="Enter Your state"
+                    />
+
+                    {errors.state && touched.state ? (
+                      <div>{errors.state}</div>
+                    ) : null}
+                  </div>
+                </div>{' '}
+                <div className="row mb-3">
+                  <div className="form-outline form-white">
+                    <label htmlFor="email" style={{ fontWeight: '700' }}>
+                      pin code
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      id="pinCode"
+                      name="pinCode"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.pinCode}
+                      placeholder="Enter Your pinCode"
+                    />
+
+                    {errors.pinCode && touched.pinCode ? (
+                      <div>{errors.pinCode}</div>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="row justify-content-start mt-4">
+              <div className="col">
+                <button
+                  type="submit"
+                  className="btn btn-primary mt-4"
+                  // onClick={toggleModal}
+                >
+                  update
+                </button>
+                <button
+                  className="btn btn-dark  mt-4 mx-2"
+                  onClick={toggleModal}
+                >
+                  back
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </Modal>
     </div>
   );
 };

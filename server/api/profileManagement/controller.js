@@ -20,7 +20,6 @@ exports.changePassword = async (req, res) => {
   const newPassword = decrypted2.toString(CryptoJS.enc.Utf8);
   const confirmPassword = decrypted3.toString(CryptoJS.enc.Utf8);
 
-  console.log('first', currentPassword, newPassword, confirmPassword);
   const token = req.header('Authorization')
     ? req.header('Authorization').replace('Bearer ', '')
     : null;
@@ -36,7 +35,7 @@ exports.changePassword = async (req, res) => {
     who.password,
     who.salt
   );
-  console.log(VerifyPassword);
+
   if (!VerifyPassword) {
     return errorMessage(res, 'You entered the Wrong Password');
   } else {
@@ -91,7 +90,6 @@ exports.reportDisease = async (req, res) => {
 
 // get user profile
 exports.viewProfile = async (req, res) => {
-  console.log('req.user', req.user);
   let who = await login.findById(req.user.id);
   const data = await signup.aggregate([
     {
@@ -102,12 +100,12 @@ exports.viewProfile = async (req, res) => {
         as: 'login_info',
       },
     },
-    // {
-    //   $unwind: {
-    //     path: '$login_info',
-    //     preserveNullAndEmptyArrays: true,
-    //   },
-    // },
+    {
+      $unwind: {
+        path: '$login_info',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
     {
       $lookup: {
         from: 'medicaldetails',
@@ -128,7 +126,7 @@ exports.viewProfile = async (req, res) => {
       },
     },
   ]);
-  console.log('data', data);
+
   res.send({
     success: true,
     data: data,
@@ -138,6 +136,129 @@ exports.viewProfile = async (req, res) => {
     res.send({
       success: false,
       message: e.message,
+    });
+  }
+};
+
+// get basic data
+exports.getBasicData = async (req, res) => {
+  let who = await login.findById(req.user.id);
+  const data = await signup
+    .findOne({ loginId: who._id })
+    .populate('loginId', 'username email') // Replace 'username' and 'email' with the fields you want to populate from the Login model
+    .exec();
+
+  res.send({
+    success: true,
+    data: data,
+  });
+  try {
+  } catch (e) {
+    res.send({
+      success: false,
+      message: e.message,
+    });
+  }
+};
+
+// update basic profile
+exports.updateBasicProfile = async (req, res) => {
+  try {
+    console.log('req.body', req.body);
+    const who = await login.findById(req.user.id);
+    console.log(who);
+    const updatedProfile = await signup.findOneAndUpdate(
+      {
+        loginId: who._id,
+      },
+      {
+        name: req.body.name,
+        aadharNo: req.body.aadharNo,
+        phoneNumber: req.body.phoneNumber,
+        dob: req.body.dob,
+        pinCode: req.body.pinCode,
+        country: req.body.country,
+        state: req.body.state,
+      },
+      { new: true } // To return the updated document
+    );
+
+    if (!updatedProfile) {
+      return res.send({
+        success: false,
+        message: 'Profile not found',
+      });
+    }
+
+    res.send({
+      success: true,
+      message: 'Profile updated',
+      profile: updatedProfile,
+    });
+  } catch (error) {
+    res.send({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// get medical data
+exports.getMedData = async (req, res) => {
+  let who = await login.findById(req.user.id);
+  const data = await medicalDetails
+    .findOne({ loginId: who._id })
+    .populate('loginId', 'username email') // Replace 'username' and 'email' with the fields you want to populate from the Login model
+    .exec();
+
+  res.send({
+    success: true,
+    data: data,
+  });
+  try {
+  } catch (e) {
+    res.send({
+      success: false,
+      message: e.message,
+    });
+  }
+};
+
+// update medical data
+exports.updateMedData = async (req, res) => {
+  try {
+    console.log('req.body', req.body);
+    const who = await login.findById(req.user.id);
+    console.log(who);
+    const updatedProfile = await medicalDetails.findOneAndUpdate(
+      {
+        loginId: who._id,
+      },
+      {
+        blood: req.body.blood,
+        height: req.body.height,
+        weight: req.body.weight,
+        gender: req.body.gender,
+      },
+      { new: true } // To return the updated document
+    );
+
+    if (!updatedProfile) {
+      return res.send({
+        success: false,
+        message: 'Profile not found',
+      });
+    }
+
+    res.send({
+      success: true,
+      message: 'Profile updated',
+      profile: updatedProfile,
+    });
+  } catch (error) {
+    res.send({
+      success: false,
+      message: error.message,
     });
   }
 };
