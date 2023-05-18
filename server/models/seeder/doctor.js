@@ -147,11 +147,7 @@ const createSeedData = async (req, res) => {
         hospitalId: '2',
         departmentId: '5',
       },
-      {
-        doctorName: 'Dr. Emily Reynolds',
-        hospitalId: '3',
-        departmentId: '5',
-      },
+      
     ];
 
     const existingDoc = await hospital.find();

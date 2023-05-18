@@ -55,16 +55,16 @@ exports.changePassword = async (req, res) => {
 //report disease
 exports.reportDisease = async (req, res) => {
   try {
-    console.log('req.body', req.body);
+    // console.log('req.body', req.body);
     const token = req.header('Authorization')
       ? req.header('Authorization').replace('Bearer ', '')
       : null;
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     let who = await login.findById(decoded.id);
-    console.log('who', who);
+    // console.log('who', who);
     const med = await medicalDetails.findOne({ loginId: who._id });
-    console.log('med', med);
+    // console.log('med', med);
 
     const mappedArray = req.body.diseases.map((item) => {
       return {
@@ -164,7 +164,7 @@ exports.getBasicData = async (req, res) => {
 // update basic profile
 exports.updateBasicProfile = async (req, res) => {
   try {
-    console.log('req.body', req.body);
+    // console.log('req.body', req.body);
     const who = await login.findById(req.user.id);
     console.log(who);
     const updatedProfile = await signup.findOneAndUpdate(
@@ -252,7 +252,7 @@ exports.updateMedData = async (req, res) => {
 
     res.send({
       success: true,
-      message: 'Profile updated',
+      message: 'data updated',
       profile: updatedProfile,
     });
   } catch (error) {

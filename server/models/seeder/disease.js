@@ -15,10 +15,64 @@ const createSeedData = async (req, res) => {
   try {
     const diseaseData = [
       {
-        diseaseName: 'fever',
+        name: 'fever',
       },
       {
-        diseaseName: 'vomiting',
+        name: 'vomiting',
+      },
+      {
+        name: 'headache',
+      },
+      {
+        name: 'cough',
+      },
+      {
+        name: 'sore throat',
+      },
+      {
+        name: 'runny nose',
+      },
+      {
+        name: 'fatigue',
+      },
+      {
+        name: 'diarrhea',
+      },
+      {
+        name: 'body aches',
+      },
+      {
+        name: 'chills',
+      },
+      {
+        name: 'shortness of breath',
+      },
+      {
+        name: 'loss of taste',
+      },
+      {
+        name: 'loss of smell',
+      },
+      {
+        name: 'nausea',
+      },
+      {
+        name: 'dizziness',
+      },
+      {
+        name: 'stomach pain',
+      },
+      {
+        name: 'rash',
+      },
+      {
+        name: 'chest pain',
+      },
+      {
+        name: 'high blood pressure',
+      },
+      {
+        name: 'diabetes',
       },
     ];
 

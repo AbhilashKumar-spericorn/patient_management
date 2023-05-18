@@ -15,7 +15,7 @@ const AddDisease = () => {
 
   const dOptions = Diseases?.map((item, index) => (
     <option key={index} value={item._id}>
-      {item.diseaseName}
+      {item.name}
     </option>
   ));
   const [diseases, setDiseases] = useState([

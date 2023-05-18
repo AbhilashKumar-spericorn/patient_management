@@ -46,15 +46,15 @@ exports.getReports = async (req, res) => {
       },
       {
         $lookup: {
-          from: 'signups',
-          localField: 'loginId',
-          foreignField: 'loginId',
-          as: 'signup_info',
+          from: 'diseases',
+          localField: 'diseaseName',
+          foreignField: '_id',
+          as: 'd_info',
         },
       },
       {
         $unwind: {
-          path: '$signup_info',
+          path: '$d_info',
           preserveNullAndEmptyArrays: true,
         },
       },
@@ -63,8 +63,14 @@ exports.getReports = async (req, res) => {
           loginId: who._id,
         },
       },
+      {
+        $project: {
+          diseases: 1,
+         
+        },
+      },
     ]);
-    // console.log('data', data)
+    console.log('data', data)
     res.send({
       success: true,
       data: data,

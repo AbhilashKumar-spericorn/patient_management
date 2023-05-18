@@ -130,9 +130,9 @@ const permissionReducer = (state = permissionInitials, action) => {
 
 // hospital reducer
 const hospitalInitials = {
-  hospitals: [],
-  doctors: [],
-  departments: [],
+  hospital_details: [],
+  doctor_details: [],
+  department_details: [],
   Diseases: [],
   report: [],
 };
@@ -142,17 +142,17 @@ const hospitalReducer = (state = hospitalInitials, action) => {
     case 'SET_HOSPITALS':
       return {
         ...state,
-        hospital: action.payload,
+        hospital_details: action.payload,
       };
     case 'SET_DOCTORS':
       return {
         ...state,
-        doctors: action.payload,
+        doctor_details: action.payload,
       };
     case 'SET_DEPARTMENTS':
       return {
         ...state,
-        departments: action.payload,
+        department_details: action.payload,
       };
     case 'SET_DISEASES':
       return {

@@ -28,6 +28,7 @@ export const resetSuccessMessage = () => (dispatch) => {
 };
 
 // reset error message toaster
+
 export const resetErrorMessage = () => (dispatch) => {
   dispatch({
     type: 'ERROR_MESSAGE',
@@ -45,6 +46,7 @@ export const setLogout = (navigate) => async (dispatch) => {
 };
 
 //change-password
+
 export const changePass = (props) => async (dispatch) => {
   const { data } = await postData('/profile/change-password', props);
   if (data.success) {
@@ -55,6 +57,7 @@ export const changePass = (props) => async (dispatch) => {
 };
 
 //to fetch feedbacks
+
 export const fetchFeedbacks = (id) => async (dispatch) => {
   const { data } = await getData('/contact/feedback');
   if (data.success) {
@@ -69,6 +72,7 @@ export const fetchFeedbacks = (id) => async (dispatch) => {
 };
 
 //to fetch feedbacks
+
 export const readMessage = (id) => async (dispatch) => {
   const { data } = await getData(`/contact/feedback/${id}`);
   console.log('data', data);
@@ -84,6 +88,7 @@ export const readMessage = (id) => async (dispatch) => {
 };
 
 //get user profile
+
 export const getUserProfile = () => async (dispatch) => {
   const { data } = await getData('profile/data');
   if (data.success) {
@@ -98,6 +103,7 @@ export const getUserProfile = () => async (dispatch) => {
 };
 
 //get basic data
+
 export const getBasicProfile = () => async (dispatch) => {
   const { data } = await getData('profile/basic-data');
   if (data.success) {
