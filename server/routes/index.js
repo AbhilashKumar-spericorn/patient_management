@@ -8,6 +8,9 @@ router.use('/doctor', require('../api/doctorManagement/index'));
 router.use('/profile', require('../api/profileManagement/index'));
 router.use('/disease', require('../api/diseaseManagement/index'));
 router.use('/department', require('../api/departmentManagement/index'));
+router.use('/consultation', require('../api/consultationManagement/index'));
+router.use('/vaccines', require('../api/vaccineManagement/index'));
+
 
 
 

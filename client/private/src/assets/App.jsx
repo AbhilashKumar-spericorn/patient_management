@@ -11,6 +11,8 @@ import ReportOfDiseases from './Diseases/ReportOfDiseases';
 import AddDisease from './Diseases/AddDisease';
 import Consultation from './Consultations/Consultation';
 import RegisterConsultations from './Consultations/RegisterConsultations';
+import Vaccination from './Vaccinations/Vaccination';
+import RegisterVaccination from './Vaccinations/RegisterVaccination';
 import ChangePassword from './Dashboard/ChangePassword';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
@@ -65,6 +67,10 @@ const App = () => {
           <Route path="/add-disease" element={<AddDisease />} />;
           <Route path="/consultation" element={<Consultation />} />;
           <Route path="/read-feedback/:id" element={<ReadMessage />} />
+          <Route path="/vaccinations" element={<Vaccination />} />
+
+          <Route path="/add-vaccinations" element={<RegisterVaccination />} />
+
         </Routes>
       </BrowserRouter>
     </div>

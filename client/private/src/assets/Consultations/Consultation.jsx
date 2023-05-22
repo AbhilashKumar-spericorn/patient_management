@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Dashboard/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
+import Web3 from 'web3';
+import wrappedTokenDeposit from '../../blockchain/wrappedTokenDeposit';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
-import { fetchHospitals, fetchDepartments, fetchDoctors } from './action';
+import { fetchHospitals, fetchDepartments, fetchDoctors,registerConsultant } from './action';
 
 const Consultation = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -29,7 +32,7 @@ const Consultation = () => {
     (e) => e.hospital
   );
 
-  console.log(doctor_details);
+  // console.log(doctor_details);
 
   useEffect(() => {
     if (selectedDepartment && selectedHospital) {
@@ -43,7 +46,7 @@ const Consultation = () => {
       setFilteredDoctors([]);
     }
   }, [selectedDepartment, selectedHospital, doctor_details]);
-  console.log('filte', filteredDoctors);
+  // console.log('filte', filteredDoctors);
 
   const hospitalData = hospital_details?.map((data, index) => {
     return (
@@ -102,8 +105,8 @@ const Consultation = () => {
       // hospital: Yup.string().required('hospital is Required'),
       // department: Yup.string().required('department is Required'),
       doctor: Yup.string().required('doctor is required'),
-      date:Yup.date().required(' Date is required'),
-      time: Yup.string().required('select time')
+      date: Yup.date().required(' Date is required'),
+      time: Yup.string().required('select time'),
     }),
     enableReinitialize: true,
     // initial values
@@ -114,11 +117,51 @@ const Consultation = () => {
       doctor: '',
       time: '',
     },
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
       // resetForm({ values: '' });
       values.hospital = selectedHospital;
       values.department = selectedDepartment;
       console.log('values', values);
+
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const web3 = new Web3(window.ethereum);
+      const accounts = await web3.eth.getAccounts();
+      const netVer = await web3.eth.net.getId();
+      localStorage.setItem('walletAddress', accounts[0]);
+      const wrapper = await wrappedTokenDeposit({
+        web3,
+        address: accounts[0],
+        netVer,
+      });
+      const tokenAddress = '0x72d46adf628719E83c67D1a3b91743f382355308';
+
+      const toWei = async (web3, amount, decimals) => {
+        return await web3.utils.toWei(
+          parseFloat(amount).toFixed(decimals).toString(),
+          'ether'
+        );
+      };
+
+      const getGasPrice = async (web3) => {
+        const gasPrice = await web3.eth.getGasPrice();
+        return web3.utils.toBN(gasPrice).add(web3.utils.toBN('20000000000'));
+      };
+
+      const AmountInWei = await toWei(web3, 0.001, 18);
+      const GetGasPricesss = await getGasPrice(web3);
+
+      const result = await web3.eth.sendTransaction({
+        from: accounts[0],
+        to: tokenAddress,
+        value: AmountInWei,
+        GetGasPricesss,
+      });
+
+      if (result) {
+        dispatch(registerConsultant(values, navigate));
+      } else {
+        console.log('error');
+      }
     },
   });
 
@@ -229,12 +272,13 @@ const Consultation = () => {
                 <option value="3:00pm-4:00pm">3:00pm - 4:00pm</option>
                 <option value="4:00pm-5:00pm">4:00pm - 5:00pm</option>
               </select>
-              {errors.time && touched.time ? (
-                <div>{errors.time}</div>
-              ) : null}
+              {errors.time && touched.time ? <div>{errors.time}</div> : null}
             </div>
             <button type="submit" className="btn btn-primary mt-5">
               Submit
+            </button>
+            <button className="btn btn-dark mt-5 mx-2" onClick={toggleModal}>
+              back
             </button>
           </form>
         </div>

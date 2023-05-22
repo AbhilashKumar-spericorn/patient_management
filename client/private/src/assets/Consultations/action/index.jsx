@@ -43,3 +43,15 @@ export const fetchDoctors = (id) => async (dispatch) => {
     dispatch(setErrorMessage(data.message));
   }
 };
+
+//add  consultations
+
+export const registerConsultant = (props) => async (dispatch) => {
+  console.log('props', props)
+  const { data } = await postData('/consultation', props);
+  if (data.success) {
+    // dispatch(setSuccessMessage(data.message));
+  } else {
+    dispatch(setErrorMessage(data.message));
+  }
+};

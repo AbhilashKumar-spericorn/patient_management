@@ -135,6 +135,7 @@ const hospitalInitials = {
   department_details: [],
   Diseases: [],
   report: [],
+  vaccines: [],
 };
 
 const hospitalReducer = (state = hospitalInitials, action) => {
@@ -164,6 +165,11 @@ const hospitalReducer = (state = hospitalInitials, action) => {
         ...state,
         report: action.payload,
       };
+      case 'SET_VACCINES':
+        return {
+          ...state,
+          vaccines: action.payload,
+        };
 
     default:
       return state;
