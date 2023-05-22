@@ -4,6 +4,6 @@ const controller = require('./controller');
 
 
 router.route('/').post(controller.addConsultation);
-// router.get('/', getDepartmentHospitalDoctor);
+router.route('/user-data').get(controller.getUserCData)
 
 module.exports = router;

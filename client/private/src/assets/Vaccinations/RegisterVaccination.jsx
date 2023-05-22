@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import styled from 'styled-components';
 // import './Vaccinations.css';
-import Web3 from 'web3';
-import wrappedTokenWithdraw from '../../blockchain/wrappedTokenWithdraw';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchHospitals } from '../Consultations/action';
-import { getVaccines } from './actions';
+import { getVaccines, registerVaccinations } from './actions';
+import Web3 from 'web3';
+import wrappedTokenDeposit from '../../blockchain/wrappedTokenDeposit';
 
 const FormContainer = styled.div`
   background-color: #222;
@@ -21,7 +22,7 @@ const FormContainer = styled.div`
 
 const FormField = styled.div`
   margin-bottom: 10px;
-  width : 50%
+  width: 50%;
 `;
 
 const Label = styled.label`
@@ -30,14 +31,13 @@ const Label = styled.label`
   margin-bottom: 5px;
 `;
 
-
 const ErrorMsg = styled.div`
   color: black;
   font-size: 14px;
 `;
 
 const validationSchema = Yup.object({
-  hospital: Yup.string()
+  hospitalId: Yup.string()
     .required('Hospital name is required')
     .matches(/^[a-zA-Z0-9\s]+$/, 'Special characters are not allowed'),
   vaccineName: Yup.string()
@@ -48,6 +48,8 @@ const validationSchema = Yup.object({
 });
 
 const RegisterVaccination = () => {
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchHospitals());
@@ -66,7 +68,7 @@ const RegisterVaccination = () => {
 
   const hospitalData = hospital_details?.map((data, index) => {
     return (
-      <option value={data.hospitalName} key={index}>
+      <option value={data._id} key={index}>
         {data.hospitalName}
       </option>
     );
@@ -81,7 +83,7 @@ const RegisterVaccination = () => {
   }, []);
   const formik = useFormik({
     initialValues: {
-      hospital: '',
+      hospitalId: '',
       vaccineName: '',
       date: '',
       time: '',
@@ -93,15 +95,42 @@ const RegisterVaccination = () => {
       const web3 = new Web3(window.ethereum);
       const accounts = await web3.eth.getAccounts();
       const netVer = await web3.eth.net.getId();
-      localStorage.setItem('walletAddress', accounts[0]);
-      const wrapper = await wrappedTokenWithdraw({
-        web3,
-        address: accounts[0],
-        netVer,
-      });
+      // localStorage.setItem('walletAddress', accounts[0]);
+      // const wrapper = await wrappedTokenDeposit({
+      //   web3,
+      //   address: accounts[0],
+      //   netVer,
+      // });
+      const tokenAddress = '0x44B8363ED6e1424Fe8346F5c77883D69d8619f03';
 
-      //   console.log('wrappedTokenWithdraw', loader);
-      // Handle form submission
+      const toWei = async (web3, amount, decimals) => {
+        return await web3.utils.toWei(
+          parseFloat(amount).toFixed(decimals).toString(),
+          'ether'
+        );
+      };
+
+      const getGasPrice = async (web3) => {
+        const gasPrice = await web3.eth.getGasPrice();
+        return web3.utils.toBN(gasPrice).add(web3.utils.toBN('20000000000'));
+      };
+
+      const AmountInWei = await toWei(web3, 0.001, 18);
+      console.log('AmountInWei', AmountInWei);
+      const GetGasPricesss = await getGasPrice(web3);
+      const result = await web3.eth.sendTransaction({
+        from: accounts[0],
+        to: tokenAddress,
+        value: AmountInWei,
+        GetGasPricesss,
+      });
+      console.log('result', result);
+      if (result) {
+        console.log(values);
+        dispatch(registerVaccinations({ values, result }, navigate));
+      } else {
+        console.log('error');
+      }
     },
   });
 
@@ -112,37 +141,36 @@ const RegisterVaccination = () => {
         <FormField>
           <Label htmlFor="hospital">Hospital:</Label>
           <select
-                name="hospital"
-                id="hospital"
-                value={formik.values.hospital}
-                onChange={formik.handleChange}
-                className="form-control"
-                onBlur={formik.handleBlur}
-                placeholder='select hospital'
-
-              >
-                <option value="">Select Hospital</option>
-                {hospitalData}
-              </select>
-          {formik.touched.hospital && formik.errors.hospital && (
-            <ErrorMsg>{formik.errors.hospital}</ErrorMsg>
+            name="hospitalId"
+            id="hospitalId"
+            value={formik.values.hospitalId}
+            onChange={formik.handleChange}
+            className="form-control"
+            onBlur={formik.handleBlur}
+            placeholder="select hospital"
+          >
+            <option value="">Select Hospital</option>
+            {hospitalData}
+          </select>
+          {formik.touched.hospitalId && formik.errors.hospitalId && (
+            <ErrorMsg>{formik.errors.hospitalId}</ErrorMsg>
           )}
         </FormField>
 
         <FormField>
           <Label htmlFor="vaccineName">Vaccine Name:</Label>
           <select
-                name="vaccineName"
-                id="vaccineName"
-                value={formik.values.vaccineName}
-                onChange={formik.handleChange}
-                className="form-control"
-                onBlur={formik.handleBlur}
-              >
-                <option value="">Select vaccine</option>
-                {vaccineData}
-              </select>
-          
+            name="vaccineName"
+            id="vaccineName"
+            value={formik.values.vaccineName}
+            onChange={formik.handleChange}
+            className="form-control"
+            onBlur={formik.handleBlur}
+          >
+            <option value="">Select vaccine</option>
+            {vaccineData}
+          </select>
+
           {formik.touched.vaccineName && formik.errors.vaccineName && (
             <ErrorMsg>{formik.errors.vaccineName}</ErrorMsg>
           )}
@@ -158,7 +186,7 @@ const RegisterVaccination = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.date}
-            className='form-control'
+            className="form-control"
           />
           {formik.touched.date && formik.errors.date && (
             <ErrorMsg>{formik.errors.date}</ErrorMsg>
@@ -175,7 +203,7 @@ const RegisterVaccination = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.time}
-            className='form-control'
+            className="form-control"
           />
           {formik.touched.time && formik.errors.time && (
             <ErrorMsg>{formik.errors.time}</ErrorMsg>

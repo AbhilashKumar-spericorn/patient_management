@@ -7,9 +7,17 @@ import wrappedTokenDeposit from '../../blockchain/wrappedTokenDeposit';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
-import { fetchHospitals, fetchDepartments, fetchDoctors,registerConsultant } from './action';
+import {
+  fetchHospitals,
+  fetchDepartments,
+  fetchDoctors,
+  registerConsultant,
+  getConsultationData
+} from './action';
+import DataTable, { createTheme } from 'react-data-table-component';
 
 const Consultation = () => {
+  const userRole = JSON.parse(localStorage.getItem('currentUser')).designation;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,10 +30,76 @@ const Consultation = () => {
     setIsModalOpen(!isModalOpen);
   };
 
+  const { userConsultationData } = useSelector((e) => e.hospital);
+  console.log(userConsultationData)
+  createTheme(
+    'solarized',
+    {
+      text: {
+        primary: 'yellow',
+        secondary: 'white',
+      },
+      background: {
+        default: '#002b36',
+      },
+      context: {
+        background: '#cb4b16',
+        text: '#FFFFFF',
+      },
+      divider: {
+        default: '#073642',
+      },
+      action: {
+        button: 'rgba(0,0,0,.54)',
+        hover: 'rgba(0,0,0,.08)',
+        disabled: 'rgba(0,0,0,.12)',
+      },
+    },
+    'dark'
+  );
+
+
+  const columns = [
+    {
+      name: 'hospital Name',
+      selector: (row) => row?.hospitalId?.hospitalName,
+    },
+    {
+      name: 'Department Name',
+      selector: (row) => row?.departmentId?.departmentName,
+    },
+    {
+      name: 'Doctor ',
+      selector: (row) => row?.doctorId?.doctorName,
+
+    },
+    // {
+    //   name: 'time',
+    //   selector: (row) => (
+    //     <div>
+    //       {' '}
+    //       <Link className="btn btn-info" to={`/read-feedback/${row._id}`}>
+    //         Read
+    //       </Link>
+    //       {/* <button
+    //         className="btn btn-warning"
+    //         onClick={() => {
+    //           dispatch(dltFeedBack(row.id));
+    //         }}
+    //         style={{ marginLeft:"5px" }}
+    //       >
+    //         delete
+    //       </button> */}
+    //     </div>
+    //   ),
+    // },
+  ];
+
   useEffect(() => {
     dispatch(fetchHospitals());
     dispatch(fetchDepartments());
     dispatch(fetchDoctors());
+    dispatch(getConsultationData())
   }, []);
 
   const { hospital_details, department_details, doctor_details } = useSelector(
@@ -127,13 +201,13 @@ const Consultation = () => {
       const web3 = new Web3(window.ethereum);
       const accounts = await web3.eth.getAccounts();
       const netVer = await web3.eth.net.getId();
-      localStorage.setItem('walletAddress', accounts[0]);
-      const wrapper = await wrappedTokenDeposit({
-        web3,
-        address: accounts[0],
-        netVer,
-      });
-      const tokenAddress = '0x72d46adf628719E83c67D1a3b91743f382355308';
+      // localStorage.setItem('walletAddress', accounts[0]);
+      // const wrapper = await wrappedTokenDeposit({
+      //   web3,
+      //   address: accounts[0],
+      //   netVer,
+      // });
+      const tokenAddress = '0x44B8363ED6e1424Fe8346F5c77883D69d8619f03';
 
       const toWei = async (web3, amount, decimals) => {
         return await web3.utils.toWei(
@@ -148,17 +222,18 @@ const Consultation = () => {
       };
 
       const AmountInWei = await toWei(web3, 0.001, 18);
+      console.log('AmountInWei', AmountInWei);
       const GetGasPricesss = await getGasPrice(web3);
-
       const result = await web3.eth.sendTransaction({
         from: accounts[0],
         to: tokenAddress,
         value: AmountInWei,
         GetGasPricesss,
       });
-
+      console.log('result', result);
       if (result) {
-        dispatch(registerConsultant(values, navigate));
+        console.log(values);
+        dispatch(registerConsultant({ values, result }, navigate));
       } else {
         console.log('error');
       }
@@ -171,9 +246,19 @@ const Consultation = () => {
         <Navbar />
         <div className="col-sm p-3 min-vh-100">
           <div className="mb-3">
-            <button className="btn btn-info add-btn" onClick={toggleModal}>
-              Register
-            </button>
+            {userRole === 'Patient' ? (
+              <button className="btn btn-info add-btn" onClick={toggleModal}>
+                Register
+              </button>
+            ) : null}
+              <div className='mt-5'>
+            <DataTable
+            columns={columns}
+            data={userConsultationData}
+            pagination
+            theme="solarized"
+          />
+            </div>
           </div>
         </div>
       </div>

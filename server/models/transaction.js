@@ -2,34 +2,15 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const { ObjectId } = Schema.Types;
 
-
 const transaction = new mongoose.Schema({
-
-  transactionHash: {
+  amount: { type: String, trim: true, required: false },
+  status: { type: String, trim: true, required: false },
+  appointmentType: {
     type: String,
+    enum: ['consultation', 'vaccination'],
     required: false,
-    trim: true,
   },
-  amount: {
-    type: String,
-    required: false,
-    trim: true,
-  },
-  from: {
-    type: String,
-    required: false,
-    trim: true,
-  },
-  to: {
-    type: String,
-    required: false,
-    trim: true,
-  },
-  status: { 
-    type: String,
-    required: false,
-    trim: true,
-},
+  loginId: { type: ObjectId, ref: 'login', required: false },
 });
 
 module.exports = mongoose.model('transaction', transaction);

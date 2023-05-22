@@ -55,3 +55,18 @@ export const registerConsultant = (props) => async (dispatch) => {
     dispatch(setErrorMessage(data.message));
   }
 };
+
+
+// get registered user consultation
+export const getConsultationData = () => async (dispatch) => {
+  const { data } = await getData('/consultation/user-data');
+  if (data.success) {
+    // dispatch(setSuccessMessage(data.message));
+    dispatch({
+        type: 'SET_CONSULTATION_DATA',
+        payload: data.data,
+      });
+  } else {
+    dispatch(setErrorMessage(data.message));
+  }
+};

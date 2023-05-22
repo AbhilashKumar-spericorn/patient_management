@@ -17,8 +17,10 @@ const transaction = require('../../models/transaction');
 exports.addConsultation = async (req, res) => {
   try {
     console.log('req.body', req.body);
-    const { date, time } = req.body;
-    const doctordata = await doctor.findOne({ doctorName: req.body.doctor });
+    const { date, time } = req.body.values;
+    const doctordata = await doctor.findOne({
+      doctorName: req.body.values.doctor,
+    });
     const existingConsultation = await consultation.findOne({
       date,
       time,
@@ -34,10 +36,10 @@ exports.addConsultation = async (req, res) => {
     }
     console.log('doctordata', doctordata);
     const departmentdata = await department.findOne({
-      departmentName: req.body.department,
+      departmentName: req.body.values.department,
     });
     const hospitaldata = await hospital.findOne({
-      hospitalName: req.body.hospital,
+      hospitalName: req.body.values.hospital,
     });
     const token = req.header('Authorization')
       ? req.header('Authorization').replace('Bearer ', '')
@@ -48,12 +50,20 @@ exports.addConsultation = async (req, res) => {
     const decodedemail = decoded.email;
     const loginData = await login.findOne({ email: decodedemail });
     console.log('loginData', loginData);
+    const trans = await transaction.create({
+      amount: '0.00',
+      status: req.body.result.status,
+      appointmentType: 'consultation',
+      transactionHash: req.body.result.transactionHash,
+      loginId: loginData._id,
+    });
+
     const data = await consultation.create({
-      date: req.body.date,
+      date: req.body.values.date,
       doctorId: doctordata._id,
       hospitalId: hospitaldata._id,
       departmentId: departmentdata._id,
-      time: req.body.time,
+      time: req.body.values.time,
       loginId: loginData._id,
       Status: 'Occupied',
     });
@@ -66,6 +76,27 @@ exports.addConsultation = async (req, res) => {
   } catch (e) {
     console.log('Error', e);
     return res.send({
+      success: false,
+      message: e.message,
+    });
+  }
+};
+
+//get user consultation data
+exports.getUserCData = async (req, res) => {
+  try {
+    const data = await consultation
+      .find({ loginId: req.user.id })
+      .populate('hospitalId')
+      .populate('departmentId')
+      .populate('doctorId');
+    console.log('data', data);
+    res.send({
+      data: data,
+      success: true,
+    });
+  } catch (e) {
+    res.send({
       success: false,
       message: e.message,
     });
