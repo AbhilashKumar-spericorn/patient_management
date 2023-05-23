@@ -99,7 +99,16 @@ export const issueConsultationCertificate = (id) => async (dispatch) => {
   const { data } = await postData(`/consultation/issue-certificate/${id}`);
   if (data.success) {
     // dispatch(setSuccessMessage(data.message));
-    console.log('data.data', data.data);
+    // console.log('data.data', data.data);
+    const reducedObject = data.data.reduce((result, obj) => {
+      return { ...result, ...obj };
+    }, {});
+
+    // console.log(reducedObject);
+    dispatch({
+      type: 'CONSULTATION_CERTIFICATE',
+      payload: reducedObject,
+    });
   } else {
     dispatch(setErrorMessage(data.message));
   }

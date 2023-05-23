@@ -40,7 +40,7 @@ const Consultation = () => {
   );
 
   const { loader } = useSelector((e) => e.msg);
-  console.log(registeredConsultations);
+  // console.log(registeredConsultations);
 
   //theme for data table
   createTheme(
@@ -138,6 +138,8 @@ const Consultation = () => {
   const { hospital_details, department_details, doctor_details } = useSelector(
     (e) => e.hospital
   );
+  const { cCertificateInitials } = useSelector((e) => e.hospital);
+  console.log(cCertificateInitials);
 
   // filtering drop down options
   useEffect(() => {
@@ -418,7 +420,7 @@ const Consultation = () => {
               </select>
               {errors.time && touched.time ? <div>{errors.time}</div> : null}
             </div>
-            <button type="submit"  className="btn btn-primary mt-5">
+            <button type="submit" className="btn btn-primary mt-5">
               Submit
             </button>
             {/* <button className="btn btn-dark mt-5 mx-2" onClick={toggleModal}>
