@@ -137,8 +137,9 @@ const hospitalInitials = {
   report: [],
   vaccines: [],
   userVaccineData: [],
-  registeredVaccinations : [],
+  registeredVaccinations: [],
   userConsultationData: [],
+  registeredConsultations: [],
 };
 
 const hospitalReducer = (state = hospitalInitials, action) => {
@@ -178,15 +179,20 @@ const hospitalReducer = (state = hospitalInitials, action) => {
         ...state,
         userVaccineData: action.payload,
       };
-      case 'VACCINATIONS_DATA':
-        return {
-          ...state,
-          registeredVaccinations: action.payload,
-        };
+    case 'VACCINATIONS_DATA':
+      return {
+        ...state,
+        registeredVaccinations: action.payload,
+      };
     case 'SET_CONSULTATION_DATA':
       return {
         ...state,
         userConsultationData: action.payload,
+      };
+    case 'CONSULTATION_DATA':
+      return {
+        ...state,
+        registeredConsultations: action.payload,
       };
 
     default:

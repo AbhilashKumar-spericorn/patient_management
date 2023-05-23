@@ -1,7 +1,7 @@
 const diseases = require('../../models/diseases');
 const jwt = require('jsonwebtoken');
 const login = require('../../models/login');
-const signup = require('../../models/signup')
+const signup = require('../../models/signup');
 const medicalDetails = require('../../models/medicalDetails');
 
 // list all diseases
@@ -29,7 +29,7 @@ exports.getReports = async (req, res) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     let who = await login.findById(decoded.id);
-    const data =  await medicalDetails.aggregate([
+    const data = await medicalDetails.aggregate([
       {
         $lookup: {
           from: 'logins',
@@ -66,11 +66,10 @@ exports.getReports = async (req, res) => {
       {
         $project: {
           diseases: 1,
-         
         },
       },
     ]);
-    console.log('data', data)
+    console.log('data', data);
     res.send({
       success: true,
       data: data,

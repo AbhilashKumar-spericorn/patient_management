@@ -89,9 +89,50 @@ exports.getUserData = async (req, res) => {
 exports.getRegisteredVaccinations = async (req, res) => {
   try {
     const data = await vaccinations
-      .find()
-      .populate('vaccineId')
-      .populate('hospitalId');
+    .aggregate([
+      {
+        $lookup: {
+          from: 'vaccines',
+          localField: 'vaccineId',
+          foreignField: '_id',
+          as: 'vaccination_details',
+        },
+      },
+      {
+        $unwind: {
+          path: '$vaccination_details',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'hospitals',
+          localField: 'hospitalId',
+          foreignField: '_id',
+          as: 'hospital_details',
+        },
+      },
+      {
+        $unwind: {
+          path: '$hospital_details',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'signups',
+          localField: 'loginId',
+          foreignField: 'loginId',
+          as: 'login_details',
+        },
+      },
+      {
+        $unwind: {
+          path: '$login_details',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+    ]);
     console.log('data', data);
     res.send({
       data: data,

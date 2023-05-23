@@ -12,7 +12,8 @@ import {
   fetchDepartments,
   fetchDoctors,
   registerConsultant,
-  getConsultationData
+  getConsultationData,
+  getAllConsultations,
 } from './action';
 import DataTable, { createTheme } from 'react-data-table-component';
 
@@ -30,8 +31,10 @@ const Consultation = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const { userConsultationData } = useSelector((e) => e.hospital);
-  console.log(userConsultationData)
+  const { userConsultationData, registeredConsultations } = useSelector(
+    (e) => e.hospital
+  );
+  console.log(registeredConsultations);
   createTheme(
     'solarized',
     {
@@ -58,7 +61,6 @@ const Consultation = () => {
     'dark'
   );
 
-
   const columns = [
     {
       name: 'hospital Name',
@@ -71,35 +73,54 @@ const Consultation = () => {
     {
       name: 'Doctor ',
       selector: (row) => row?.doctorId?.doctorName,
-
     },
-    // {
-    //   name: 'time',
-    //   selector: (row) => (
-    //     <div>
-    //       {' '}
-    //       <Link className="btn btn-info" to={`/read-feedback/${row._id}`}>
-    //         Read
-    //       </Link>
-    //       {/* <button
-    //         className="btn btn-warning"
-    //         onClick={() => {
-    //           dispatch(dltFeedBack(row.id));
-    //         }}
-    //         style={{ marginLeft:"5px" }}
-    //       >
-    //         delete
-    //       </button> */}
-    //     </div>
-    //   ),
-    // },
+  ];
+
+  const columns2 = [
+    {
+      name: 'Date',
+      selector: (row) => row?.date,
+    },
+    {
+      name: 'Patient Name',
+      selector: (row) => row?.login_details?.name,
+    },
+    {
+      name: 'hospital Name',
+      selector: (row) => row?.hospital_details?.hospitalName,
+    },
+    {
+      name: 'Doctor  Name',
+      selector: (row) => row?.doctor_details?.doctorName,
+    },
+    {
+      name: 'Time',
+      selector: (row) => row?.time,
+    },
+    {
+      name: 'Action',
+
+      selector: (row) => (
+        <div>
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              // dispatch(dltRoute(row.id));
+            }}
+          >
+            issue certificate
+          </button>
+        </div>
+      ),
+    },
   ];
 
   useEffect(() => {
     dispatch(fetchHospitals());
     dispatch(fetchDepartments());
     dispatch(fetchDoctors());
-    dispatch(getConsultationData())
+    dispatch(getConsultationData());
+    dispatch(getAllConsultations());
   }, []);
 
   const { hospital_details, department_details, doctor_details } = useSelector(
@@ -242,22 +263,29 @@ const Consultation = () => {
 
   return (
     <div className="container-fluid">
-      <div className="row">
+      <div className="row d-flex flex-row">
         <Navbar />
-        <div className="col-sm p-3 min-vh-100">
+        <div className="col-sm p-3 min-vh-100 w-75">
           <div className="mb-3">
             {userRole === 'Patient' ? (
               <button className="btn btn-info add-btn" onClick={toggleModal}>
                 Register
               </button>
             ) : null}
-              <div className='mt-5'>
-            <DataTable
-            columns={columns}
-            data={userConsultationData}
-            pagination
-            theme="solarized"
-          />
+            <div className="mt-5 ">
+              {userRole === 'Patient' ? (
+                <DataTable
+                  columns={columns}
+                  data={userConsultationData}
+                  pagination
+                  theme="solarized"
+                />
+              ) : ( <DataTable
+                columns={columns2}
+                data={registeredConsultations}
+                pagination
+                theme="solarized"
+              />)}
             </div>
           </div>
         </div>

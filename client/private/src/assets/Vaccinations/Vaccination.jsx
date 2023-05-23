@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Dashboard/Navbar';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getVaccinationData,getAllVaccinations } from './actions';
+import { getVaccinationData, getAllVaccinations } from './actions';
 import DataTable, { createTheme } from 'react-data-table-component';
 
 const Vaccination = () => {
@@ -12,10 +12,11 @@ const Vaccination = () => {
   useEffect(() => {
     dispatch(getVaccinationData());
     dispatch(getAllVaccinations());
-
   }, []);
 
-  const { userVaccineData,registeredVaccinations } = useSelector((e) => e.hospital);
+  const { userVaccineData, registeredVaccinations } = useSelector(
+    (e) => e.hospital
+  );
 
   createTheme(
     'solarized',
@@ -55,30 +56,43 @@ const Vaccination = () => {
       name: 'time ',
       selector: (row) => row?.date,
     },
-    // {
-    //   name: 'time',
-    //   selector: (row) => (
-    //     <div>
-    //       {' '}
-    //       <Link className="btn btn-info" to={`/read-feedback/${row._id}`}>
-    //         Read
-    //       </Link>
-    //       {/* <button
-    //         className="btn btn-warning"
-    //         onClick={() => {
-    //           dispatch(dltFeedBack(row.id));
-    //         }}
-    //         style={{ marginLeft:"5px" }}
-    //       >
-    //         delete
-    //       </button> */}
-    //     </div>
-    //   ),
-    // },
+  ];
+
+  const columns2 = [
+    {
+      name: 'Patient Name',
+      selector: (row) => row?.login_details?.name,
+    },
+    {
+      name: 'hospital Name',
+      selector: (row) => row?.hospital_details?.hospitalName
+    },
+    {
+      name: 'vaccine Name',
+      selector: (row) => row?.vaccination_details?.name
+    },
+    {
+      name: 'Action',
+   
+      selector: (row) => (
+        <div>
+          
+
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              // dispatch(dltRoute(row.id));
+            }}
+          >
+            issue certificate
+          </button>
+        </div>
+      ),
+    },
   ];
 
   console.log('first', registeredVaccinations);
- 
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -92,13 +106,22 @@ const Vaccination = () => {
                 </Link>
               ) : null}
             </div>
-            <div className='mt-5'>
-            <DataTable
-            columns={columns}
-            data={userVaccineData}
-            pagination
-            theme="solarized"
-          />
+            <div className="mt-5">
+              {userRole === 'Patient' ? (
+                <DataTable
+                  columns={columns}
+                  data={userVaccineData}
+                  pagination
+                  theme="solarized"
+                />
+              ) : (
+                <DataTable
+                  columns={columns2}
+                  data={registeredVaccinations}
+                  pagination
+                  theme="solarized"
+                />
+              )}
             </div>
           </div>
         </div>

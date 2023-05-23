@@ -102,3 +102,77 @@ exports.getUserCData = async (req, res) => {
     });
   }
 };
+
+//get all vaccination data
+exports.getRegisteredConsultations = async (req, res) => {
+  try {
+    const data = await consultation.aggregate([
+      {
+        $lookup: {
+          from: 'hospitals',
+          localField: 'hospitalId',
+          foreignField: '_id',
+          as: 'hospital_details',
+        },
+      },
+      {
+        $unwind: {
+          path: '$hospital_details',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'departments',
+          localField: 'departmentId',
+          foreignField: '_id',
+          as: 'department_details',
+        },
+      },
+      {
+        $unwind: {
+          path: '$department_details',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'doctors',
+          localField: 'doctorId',
+          foreignField: '_id',
+          as: 'doctor_details',
+        },
+      },
+      {
+        $unwind: {
+          path: '$doctor_details',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'signups',
+          localField: 'loginId',
+          foreignField: 'loginId',
+          as: 'login_details',
+        },
+      },
+      {
+        $unwind: {
+          path: '$login_details',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+    ]);
+    console.log('data', data);
+    res.send({
+      data: data,
+      success: true,
+    });
+  } catch (e) {
+    res.send({
+      success: false,
+      message: e.message,
+    });
+  }
+};

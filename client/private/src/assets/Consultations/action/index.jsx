@@ -70,3 +70,17 @@ export const getConsultationData = () => async (dispatch) => {
     dispatch(setErrorMessage(data.message));
   }
 };
+
+// get  vaccine details
+export const getAllConsultations = () => async (dispatch) => {
+  const { data } = await getData('/consultation/list');
+  if (data.success) {
+    // dispatch(setSuccessMessage(data.message));
+    dispatch({
+      type: 'CONSULTATION_DATA',
+      payload: data.data,
+    });
+  } else {
+    dispatch(setErrorMessage(data.message));
+  }
+};
