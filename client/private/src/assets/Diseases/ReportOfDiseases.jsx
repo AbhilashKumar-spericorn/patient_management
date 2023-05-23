@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getListOfDiseases } from './action';
 import moment from 'moment';
+import Loader from '../Loader';
 
 const ReportOfDiseases = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,8 @@ const ReportOfDiseases = () => {
   }, []);
 
   const { report } = useSelector((e) => e.hospital);
+  const { loader } = useSelector((e) => e.msg);
+  console.log('loader', loader)
 
   console.log('report', report);
   const reducedObject = report.reduce((result, obj) => {
@@ -33,7 +36,9 @@ const ReportOfDiseases = () => {
     );
   });
 
-  return (
+  return loader ? (
+    <Loader />
+  ) : (
     <div className="container-fluid">
       <div className="row">
         <Navbar />

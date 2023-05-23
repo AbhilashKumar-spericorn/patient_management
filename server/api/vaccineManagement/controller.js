@@ -32,6 +32,7 @@ exports.addVaccination = async (req, res) => {
     const vaccins = await vaccinations.create({
       vaccineId: vaccineList._id,
       hospitalId: hospitalData._id,
+      transactionHash: req.body.result.transactionHash,
       loginId: req.user.id,
       date: new Date(req.body.values.date).setHours(0, 0, 0, 0),
     });
@@ -88,8 +89,7 @@ exports.getUserData = async (req, res) => {
 //get all vaccination data
 exports.getRegisteredVaccinations = async (req, res) => {
   try {
-    const data = await vaccinations
-    .aggregate([
+    const data = await vaccinations.aggregate([
       {
         $lookup: {
           from: 'vaccines',

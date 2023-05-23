@@ -31,11 +31,21 @@ const consultation = new mongoose.Schema({
     required: false,
     trim: true,
   },
+  transactionHash: {
+    type: String,
+    required: false,
+    trim: true,
+  },
   loginId: {
     type: ObjectId,
     ref: 'login',
     required: false,
     trim: true,
+  },
+  status: {
+    type: String,
+    enum: ['pending', 'completed'],
+    default: 'pending',
   },
 });
 

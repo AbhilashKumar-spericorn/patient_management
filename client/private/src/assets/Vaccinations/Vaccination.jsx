@@ -4,8 +4,13 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Dashboard/Navbar';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getVaccinationData, getAllVaccinations,issueVaccineCertificate } from './actions';
+import {
+  getVaccinationData,
+  getAllVaccinations,
+  issueVaccineCertificate,
+} from './actions';
 import DataTable, { createTheme } from 'react-data-table-component';
+import Loader from '../Loader';
 
 const Vaccination = () => {
   const userRole = JSON.parse(localStorage.getItem('currentUser')).designation;
@@ -19,6 +24,9 @@ const Vaccination = () => {
   const { userVaccineData, registeredVaccinations } = useSelector(
     (e) => e.hospital
   );
+
+  const { loader } = useSelector((e) => e.msg);
+  console.log('loader', loader);
 
   createTheme(
     'solarized',
@@ -67,19 +75,17 @@ const Vaccination = () => {
     },
     {
       name: 'hospital Name',
-      selector: (row) => row?.hospital_details?.hospitalName
+      selector: (row) => row?.hospital_details?.hospitalName,
     },
     {
       name: 'vaccine Name',
-      selector: (row) => row?.vaccination_details?.name
+      selector: (row) => row?.vaccination_details?.name,
     },
     {
       name: 'Action',
-   
+
       selector: (row) => (
         <div>
-          
-
           <button
             className="btn btn-danger"
             onClick={() => {
@@ -93,9 +99,11 @@ const Vaccination = () => {
     },
   ];
 
-  console.log('first', registeredVaccinations);
+  // console.log('first', registeredVaccinations);
 
-  return (
+  return loader ? (
+    <Loader />
+  ) : (
     <div className="container-fluid">
       <div className="row">
         <Navbar />

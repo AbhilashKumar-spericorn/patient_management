@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const consultation = require('../../models/consultation');
 const doctor = require('../../models/doctor');
 const department = require('../../models/department');
@@ -64,8 +65,9 @@ exports.addConsultation = async (req, res) => {
       hospitalId: hospitaldata._id,
       departmentId: departmentdata._id,
       time: req.body.values.time,
+      transactionHash: req.body.result.transactionHash,
       loginId: loginData._id,
-      Status: 'Occupied',
+      status: 'pending',
     });
     // console.log('data', data);
     res.send({
@@ -168,6 +170,88 @@ exports.getRegisteredConsultations = async (req, res) => {
     res.send({
       data: data,
       success: true,
+    });
+  } catch (e) {
+    res.send({
+      success: false,
+      message: e.message,
+    });
+  }
+};
+
+// issue certificate
+
+exports.issueCertificate = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const data = await consultation.aggregate([
+      {
+        $lookup: {
+          from: 'hospitals',
+          localField: 'hospitalId',
+          foreignField: '_id',
+          as: 'hospital_details',
+        },
+      },
+      {
+        $unwind: {
+          path: '$hospital_details',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'departments',
+          localField: 'departmentId',
+          foreignField: '_id',
+          as: 'department_details',
+        },
+      },
+      {
+        $unwind: {
+          path: '$department_details',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'doctors',
+          localField: 'doctorId',
+          foreignField: '_id',
+          as: 'doctor_details',
+        },
+      },
+      {
+        $unwind: {
+          path: '$doctor_details',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'signups',
+          localField: 'loginId',
+          foreignField: 'loginId',
+          as: 'login_details',
+        },
+      },
+      {
+        $unwind: {
+          path: '$login_details',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(id),
+        },
+      },
+    ]);
+    console.log(data);
+    res.send({
+      success: true,
+      data: data,
     });
   } catch (e) {
     res.send({

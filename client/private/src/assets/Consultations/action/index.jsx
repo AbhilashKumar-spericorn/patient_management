@@ -1,5 +1,10 @@
 import { getData, updateData, postData, deleteData } from '../../../services';
-import { setSuccessMessage, setErrorMessage } from '../../../actions';
+import {
+  setSuccessMessage,
+  setErrorMessage,
+  loaderTrue,
+  loaderFalse,
+} from '../../../actions';
 
 //to fetch hospitals
 
@@ -46,16 +51,20 @@ export const fetchDoctors = (id) => async (dispatch) => {
 
 //add  consultations
 
-export const registerConsultant = (props) => async (dispatch) => {
-  console.log('props', props)
+export const registerConsultant = (props, navigate) => async (dispatch) => {
+  console.log('props', props);
+  dispatch(loaderTrue());
   const { data } = await postData('/consultation', props);
   if (data.success) {
     // dispatch(setSuccessMessage(data.message));
+    dispatch(loaderFalse());
+
+    dispatch(getConsultationData());
+    navigate();
   } else {
     dispatch(setErrorMessage(data.message));
   }
 };
-
 
 // get registered user consultation
 export const getConsultationData = () => async (dispatch) => {
@@ -63,9 +72,9 @@ export const getConsultationData = () => async (dispatch) => {
   if (data.success) {
     // dispatch(setSuccessMessage(data.message));
     dispatch({
-        type: 'SET_CONSULTATION_DATA',
-        payload: data.data,
-      });
+      type: 'SET_CONSULTATION_DATA',
+      payload: data.data,
+    });
   } else {
     dispatch(setErrorMessage(data.message));
   }
@@ -86,10 +95,11 @@ export const getAllConsultations = () => async (dispatch) => {
 };
 
 //to issue consultation certificate
-export const issueConsultationCertificate = () => async (dispatch) => {
-  const { data } = await postData('/consultation/issue-certificate');
+export const issueConsultationCertificate = (id) => async (dispatch) => {
+  const { data } = await postData(`/consultation/issue-certificate/${id}`);
   if (data.success) {
     // dispatch(setSuccessMessage(data.message));
+    console.log('data.data', data.data);
   } else {
     dispatch(setErrorMessage(data.message));
   }

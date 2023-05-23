@@ -5,6 +5,7 @@ import Navbar from '../Dashboard/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 import Web3 from 'web3';
+import Loader from '../Loader';
 import wrappedTokenDeposit from '../../blockchain/wrappedTokenDeposit';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,7 +17,7 @@ import {
   registerConsultant,
   getConsultationData,
   getAllConsultations,
-  issueConsultationCertificate
+  issueConsultationCertificate,
 } from './action';
 import DataTable, { createTheme } from 'react-data-table-component';
 
@@ -37,6 +38,8 @@ const Consultation = () => {
   const { userConsultationData, registeredConsultations } = useSelector(
     (e) => e.hospital
   );
+
+  const { loader } = useSelector((e) => e.msg);
   console.log(registeredConsultations);
 
   //theme for data table
@@ -111,7 +114,7 @@ const Consultation = () => {
           <button
             className="btn btn-danger"
             onClick={() => {
-              // dispatch(dltRoute(row.id));
+              dispatch(issueConsultationCertificate(row._id));
             }}
           >
             issue certificate
@@ -131,14 +134,10 @@ const Consultation = () => {
     dispatch(getAllConsultations());
   }, []);
 
-
   // values
   const { hospital_details, department_details, doctor_details } = useSelector(
     (e) => e.hospital
   );
-
-  
-
 
   // filtering drop down options
   useEffect(() => {
@@ -155,8 +154,7 @@ const Consultation = () => {
   }, [selectedDepartment, selectedHospital, doctor_details]);
   // console.log('filte', filteredDoctors);
 
-
-// hospital data
+  // hospital data
   const hospitalData = hospital_details?.map((data, index) => {
     return (
       <option value={data.hospitalName} key={index}>
@@ -207,9 +205,8 @@ const Consultation = () => {
     }));
   };
 
-
   //formik setting
-  
+
   const {
     handleSubmit,
     handleChange,
@@ -277,14 +274,23 @@ const Consultation = () => {
       console.log('result', result);
       if (result) {
         console.log(values);
-        dispatch(registerConsultant({ values, result }, navigate));
+        resetForm({ values: '' });
+        setIsModalOpen(false);
+
+        dispatch(
+          registerConsultant({ values, result }, () =>
+            navigate('/consultation')
+          )
+        );
       } else {
         console.log('error');
       }
     },
   });
 
-  return (
+  return loader ? (
+    <Loader />
+  ) : (
     <div className="container-fluid">
       <div className="row d-flex flex-row">
         <Navbar />
@@ -303,12 +309,14 @@ const Consultation = () => {
                   pagination
                   theme="solarized"
                 />
-              ) : ( <DataTable
-                columns={columns2}
-                data={registeredConsultations}
-                pagination
-                theme="solarized"
-              />)}
+              ) : (
+                <DataTable
+                  columns={columns2}
+                  data={registeredConsultations}
+                  pagination
+                  theme="solarized"
+                />
+              )}
             </div>
           </div>
         </div>
@@ -410,12 +418,12 @@ const Consultation = () => {
               </select>
               {errors.time && touched.time ? <div>{errors.time}</div> : null}
             </div>
-            <button type="submit" className="btn btn-primary mt-5">
+            <button type="submit"  className="btn btn-primary mt-5">
               Submit
             </button>
-            <button className="btn btn-dark mt-5 mx-2" onClick={toggleModal}>
+            {/* <button className="btn btn-dark mt-5 mx-2" onClick={toggleModal}>
               back
-            </button>
+            </button> */}
           </form>
         </div>
       </Modal>

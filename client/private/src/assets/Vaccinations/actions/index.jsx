@@ -1,6 +1,11 @@
 import { getData, postData } from '../../../services';
 
-import { setSuccessMessage, setErrorMessage } from '../../../actions';
+import {
+  setSuccessMessage,
+  setErrorMessage,
+  loaderTrue,
+  loaderFalse,
+} from '../../../actions';
 
 // get all vaccines
 export const getVaccines = () => async (dispatch) => {
@@ -18,7 +23,9 @@ export const registerVaccinations = (props, navigate) => async (dispatch) => {
   const { data } = await postData('/vaccines', props);
   if (data.success) {
     dispatch(setSuccessMessage(data.message));
-    navigate('/vaccinations');
+    dispatch(loaderFalse());
+
+    navigate();
   } else {
     dispatch(setErrorMessage(data.message));
   }

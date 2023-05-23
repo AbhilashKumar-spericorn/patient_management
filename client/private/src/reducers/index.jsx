@@ -63,6 +63,8 @@ const msgInitials = {
   errorMsg: '',
   feedbacks: [],
   feedback: '',
+  loader: false,
+
 };
 
 const msgReducer = (state = msgInitials, action) => {
@@ -87,6 +89,16 @@ const msgReducer = (state = msgInitials, action) => {
         ...state,
         feedback: action.payload,
       };
+      case 'LOADER_TRUE':
+        return {
+          ...state,
+          loader: true,
+        };
+      case 'LOADER_FALSE':
+        return {
+          ...state,
+          loader: false,
+        };
 
     default:
       return state;

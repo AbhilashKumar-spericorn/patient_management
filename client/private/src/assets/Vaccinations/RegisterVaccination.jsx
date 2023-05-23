@@ -6,10 +6,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import styled from 'styled-components';
 // import './Vaccinations.css';
-
+import Loader from '../Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchHospitals } from '../Consultations/action';
 import { getVaccines, registerVaccinations } from './actions';
+import { loaderTrue } from '../../actions';
 import Web3 from 'web3';
 import wrappedTokenDeposit from '../../blockchain/wrappedTokenDeposit';
 
@@ -59,6 +60,8 @@ const RegisterVaccination = () => {
   }, []);
 
   const { hospital_details, vaccines } = useSelector((e) => e.hospital);
+
+  const { loader } = useSelector((e) => e.msg);
 
   const vaccineData = vaccines?.map((data, index) => {
     return (
@@ -129,14 +132,21 @@ const RegisterVaccination = () => {
       console.log('result', result);
       if (result) {
         console.log(values);
-        dispatch(registerVaccinations({ values, result }, navigate));
+        dispatch(loaderTrue());
+        dispatch(
+          registerVaccinations({ values, result }, () =>
+            navigate('/vaccinations')
+          )
+        );
       } else {
         console.log('error');
       }
     },
   });
 
-  return (
+  return loader ? (
+    <Loader />
+  ) : (
     <div>
       <h2 style={{ color: 'black' }}>Vaccination Details</h2>
       <form onSubmit={formik.handleSubmit}>

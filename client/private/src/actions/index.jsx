@@ -156,3 +156,18 @@ export const UpdateMedInfo = (props,navigate) => async (dispatch) => {
     dispatch(setErrorMessage(data.message));
   }
 };
+
+
+//for loaders
+export const loaderTrue = () => (dispatch) => {
+  dispatch({
+    type: 'LOADER_TRUE',
+    
+  });
+};
+
+export const loaderFalse = () => (dispatch) => {
+  dispatch({
+    type: 'LOADER_FALSE',
+  });
+};
