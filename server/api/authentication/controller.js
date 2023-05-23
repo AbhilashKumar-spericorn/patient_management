@@ -14,7 +14,7 @@ exports.Login = async (req, res, next) => {
         message: 'Invalid email or password',
       });
 
-    console.log('user', user);
+    
 
     if (!(await login.verifyPassword(password, user.password, user.salt)))
       return res.send({
@@ -25,7 +25,7 @@ exports.Login = async (req, res, next) => {
     const accessToken = login.generateAuthToken(user);
     const refreshToken = login.generateAuthToken(user);
 
-    console.log('accessToken', accessToken);
+    // console.log('accessToken', accessToken);
 
     const currentUser = await signup.findOne({ loginId: user.id });
     const Cuser = await login.findById(user.id); // assuming `userId` is the ID of the user you want to update

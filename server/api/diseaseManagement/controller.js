@@ -69,7 +69,7 @@ exports.getReports = async (req, res) => {
         },
       },
     ]);
-    console.log('data', data);
+    // console.log('data', data);
     res.send({
       success: true,
       data: data,

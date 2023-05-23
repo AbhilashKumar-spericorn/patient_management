@@ -67,7 +67,7 @@ exports.addConsultation = async (req, res) => {
       loginId: loginData._id,
       Status: 'Occupied',
     });
-    console.log('data', data);
+    // console.log('data', data);
     res.send({
       success: true,
       message: 'Consultation with doctor created successfully',
@@ -90,7 +90,7 @@ exports.getUserCData = async (req, res) => {
       .populate('hospitalId')
       .populate('departmentId')
       .populate('doctorId');
-    console.log('data', data);
+    // console.log('data', data);
     res.send({
       data: data,
       success: true,
@@ -164,7 +164,7 @@ exports.getRegisteredConsultations = async (req, res) => {
         },
       },
     ]);
-    console.log('data', data);
+    // console.log('data', data);
     res.send({
       data: data,
       success: true,

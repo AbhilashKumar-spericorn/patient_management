@@ -1,3 +1,5 @@
+//report disease
+
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, FieldArray, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -13,6 +15,8 @@ const AddDisease = () => {
   const { Diseases } = useSelector((e) => e.hospital);
   // console.log('first', Diseases);
 
+
+  // select options
   const dOptions = Diseases?.map((item, index) => (
     <option key={index} value={item._id}>
       {item.name}

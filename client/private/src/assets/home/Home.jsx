@@ -1,3 +1,5 @@
+//home page
+
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
@@ -19,7 +21,7 @@ const Home = () => {
         <Carousel.Item>
           <img
             className="d-block w-100"
-         src =  "https://5.imimg.com/data5/ANDROID/Default/2022/8/KD/PG/OM/138582968/product-jpeg-1000x1000.jpg"
+            src="https://5.imimg.com/data5/ANDROID/Default/2022/8/KD/PG/OM/138582968/product-jpeg-1000x1000.jpg"
             alt="Second slide"
           />
 
@@ -35,7 +37,7 @@ const Home = () => {
           <Carousel.Caption></Carousel.Caption>
         </Carousel.Item>
       </Carousel>
-     
+
       <Footer />
     </div>
   );

@@ -1,8 +1,10 @@
+// list of vaccinations
+
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Dashboard/Navbar';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getVaccinationData, getAllVaccinations } from './actions';
+import { getVaccinationData, getAllVaccinations,issueVaccineCertificate } from './actions';
 import DataTable, { createTheme } from 'react-data-table-component';
 
 const Vaccination = () => {

@@ -44,7 +44,7 @@ const Navbar = () => {
               to={'/dashboard'}
               className="nav-link text-white fw-bold fs-4"
             >
-              <i className="bi-house fs-3"></i> Dashboard
+              <i className="bi bi-list fs-3"></i> Dashboard
             </Link>
           </li>
           <li className="nav-item my-1">

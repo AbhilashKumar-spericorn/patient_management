@@ -1,10 +1,10 @@
+//header
+
 import React from 'react';
 // import { useDispatch } from 'react-redux';
-
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -13,7 +13,7 @@ const NavLink = styled(Link)`
   color: white;
   text-decoration: none;
   margin-left: auto;
-  font-size : 18px;
+  font-size: 18px;
   font-weight: 500;
   &:hover {
     color: red;
@@ -43,7 +43,12 @@ const Header = () => {
                 src={require('../../images/icons8-truck-50.png')}
                 style={{ marginBottom: '20px' }}
               /> */}
-            <Logo to="/"  style={{fontSize: '30px', fontFamily: 'Arial, sans-serif',}}>CareCompass</Logo>
+              <Logo
+                to="/"
+                style={{ fontSize: '30px', fontFamily: 'Arial, sans-serif' }}
+              >
+                CareCompass
+              </Logo>
             </Navbar.Brand>
 
             <Navbar.Toggle
@@ -54,11 +59,6 @@ const Header = () => {
             <>
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto" style={{ paddingLeft: '90%' }}>
-                
-
-                  
-
-
                   <NavLink to="/login">LOGIN</NavLink>
                 </Nav>
               </Navbar.Collapse>
@@ -66,7 +66,6 @@ const Header = () => {
           </Container>
         </Navbar>
       </div>
-     
     </>
   );
 };

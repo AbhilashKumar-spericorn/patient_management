@@ -133,7 +133,7 @@ exports.getRegisteredVaccinations = async (req, res) => {
         },
       },
     ]);
-    console.log('data', data);
+    // console.log('data', data);
     res.send({
       data: data,
       success: true,

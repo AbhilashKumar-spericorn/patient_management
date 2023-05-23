@@ -64,7 +64,7 @@ const wrappedTokenDeposit = async ({
   const patientUUID = web3.utils.padRight(web3.utils.fromAscii('123'), 64);
   const patientRegId = web3.utils.padRight(web3.utils.fromAscii('123'), 64);
   const doctorName = web3.utils.padRight(
-    web3.utils.fromAscii('Kevin Jacob'),
+    web3.utils.fromAscii('Kevin '),
     64
   );
   const consultationTime = 1684384172;

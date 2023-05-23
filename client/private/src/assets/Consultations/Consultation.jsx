@@ -1,3 +1,5 @@
+//consultations
+
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Dashboard/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
@@ -14,6 +16,7 @@ import {
   registerConsultant,
   getConsultationData,
   getAllConsultations,
+  issueConsultationCertificate
 } from './action';
 import DataTable, { createTheme } from 'react-data-table-component';
 
@@ -35,6 +38,8 @@ const Consultation = () => {
     (e) => e.hospital
   );
   console.log(registeredConsultations);
+
+  //theme for data table
   createTheme(
     'solarized',
     {
@@ -61,6 +66,7 @@ const Consultation = () => {
     'dark'
   );
 
+  // data table value mapping
   const columns = [
     {
       name: 'hospital Name',
@@ -115,6 +121,8 @@ const Consultation = () => {
     },
   ];
 
+  // dispatching actions
+
   useEffect(() => {
     dispatch(fetchHospitals());
     dispatch(fetchDepartments());
@@ -123,12 +131,16 @@ const Consultation = () => {
     dispatch(getAllConsultations());
   }, []);
 
+
+  // values
   const { hospital_details, department_details, doctor_details } = useSelector(
     (e) => e.hospital
   );
 
-  // console.log(doctor_details);
+  
 
+
+  // filtering drop down options
   useEffect(() => {
     if (selectedDepartment && selectedHospital) {
       const doctors = doctor_details?.filter(
@@ -143,6 +155,8 @@ const Consultation = () => {
   }, [selectedDepartment, selectedHospital, doctor_details]);
   // console.log('filte', filteredDoctors);
 
+
+// hospital data
   const hospitalData = hospital_details?.map((data, index) => {
     return (
       <option value={data.hospitalName} key={index}>
@@ -150,6 +164,8 @@ const Consultation = () => {
       </option>
     );
   });
+
+  //department data
   const departmentData = department_details?.map((data, index) => {
     return (
       <option value={data.departmentName} key={index}>
@@ -157,6 +173,8 @@ const Consultation = () => {
       </option>
     );
   });
+
+  //doctor data
   const doctorData = filteredDoctors?.map((data, index) => {
     return (
       <option value={data.doctorName} key={index}>
@@ -164,6 +182,8 @@ const Consultation = () => {
       </option>
     );
   });
+
+  // form initial values
 
   const [formData, setFormData] = useState({
     date: '',
@@ -187,6 +207,9 @@ const Consultation = () => {
     }));
   };
 
+
+  //formik setting
+  
   const {
     handleSubmit,
     handleChange,

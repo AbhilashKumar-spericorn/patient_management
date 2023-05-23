@@ -84,3 +84,13 @@ export const getAllConsultations = () => async (dispatch) => {
     dispatch(setErrorMessage(data.message));
   }
 };
+
+//to issue consultation certificate
+export const issueConsultationCertificate = () => async (dispatch) => {
+  const { data } = await postData('/consultation/issue-certificate');
+  if (data.success) {
+    // dispatch(setSuccessMessage(data.message));
+  } else {
+    dispatch(setErrorMessage(data.message));
+  }
+};

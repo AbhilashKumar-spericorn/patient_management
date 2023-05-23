@@ -10,6 +10,8 @@ router.use('/disease', require('../api/diseaseManagement/index'));
 router.use('/department', require('../api/departmentManagement/index'));
 router.use('/consultation', require('../api/consultationManagement/index'));
 router.use('/vaccines', require('../api/vaccineManagement/index'));
+router.use('/transactions', require('../api/transactionManagement/index'));
+
 
 
 

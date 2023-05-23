@@ -140,6 +140,7 @@ const hospitalInitials = {
   registeredVaccinations: [],
   userConsultationData: [],
   registeredConsultations: [],
+  transactionData: [],
 };
 
 const hospitalReducer = (state = hospitalInitials, action) => {
@@ -193,6 +194,11 @@ const hospitalReducer = (state = hospitalInitials, action) => {
       return {
         ...state,
         registeredConsultations: action.payload,
+      };
+    case 'TRANSACTION_DATA':
+      return {
+        ...state,
+        transactionData: action.payload,
       };
 
     default:

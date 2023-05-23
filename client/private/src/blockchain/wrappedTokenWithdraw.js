@@ -47,7 +47,7 @@ const wrappedTokenWithdraw = async ({
     );
 
     const patientName = web3.utils.padRight(
-      web3.utils.fromAscii('Midhun Mohan'),
+      web3.utils.fromAscii('Kevin'),
       64
     );
     const patientUUID = web3.utils.padRight(web3.utils.fromAscii('123'), 64);

@@ -8,10 +8,12 @@ import { readMessage } from '../../actions';
 const ReadMessage = () => {
   const { id } = useParams();
 
+// to fetch messages
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(readMessage(id));
   }, []);
+
   const { feedback } = useSelector((e) => e.msg);
   
 
