@@ -172,3 +172,18 @@ export const loaderFalse = () => (dispatch) => {
     type: 'LOADER_FALSE',
   });
 };
+
+
+//get all patients
+export const getAllPatients = () => async (dispatch) => {
+  const { data } = await getData('hospital/list-patients');
+  if (data.success) {
+    dispatch({
+      type: 'SET_PATIENTS',
+      payload: data.data,
+    });
+    // dispatch(setSuccessMessage(data.message));
+  } else {
+    dispatch(setErrorMessage(data.message));
+  }
+};

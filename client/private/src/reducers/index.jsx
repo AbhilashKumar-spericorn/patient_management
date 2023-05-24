@@ -156,6 +156,7 @@ const hospitalInitials = {
   cCertificateInitials: [],
   consultationCertificates: [],
   vaccinationCertificates: [],
+  patients: [],
 };
 
 const hospitalReducer = (state = hospitalInitials, action) => {
@@ -221,16 +222,21 @@ const hospitalReducer = (state = hospitalInitials, action) => {
         cCertificateInitials: action.payload,
         success: action.successStatus,
       };
-      case 'SET_CONSULTATION_CERTIFICATES':
+    case 'SET_CONSULTATION_CERTIFICATES':
       return {
         ...state,
         consultationCertificates: action.payload,
       };
-      case 'SET_VACCINATION_CERTIFICATES':
-        return {
-          ...state,
-          vaccinationCertificates: action.payload,
-        };
+    case 'SET_VACCINATION_CERTIFICATES':
+      return {
+        ...state,
+        vaccinationCertificates: action.payload,
+      };
+    case 'SET_PATIENTS':
+      return {
+        ...state,
+        patients: action.payload,
+      };
 
     default:
       return state;
