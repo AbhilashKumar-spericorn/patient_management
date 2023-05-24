@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const vaccinations = require('../../models/vaccination');
 const vaccines = require('../../models/vaccine');
 const doctor = require('../../models/doctor');
@@ -137,6 +139,74 @@ exports.getRegisteredVaccinations = async (req, res) => {
     res.send({
       data: data,
       success: true,
+    });
+  } catch (e) {
+    res.send({
+      success: false,
+      message: e.message,
+    });
+  }
+};
+
+
+exports.issueVCertificate = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const data = await vaccinations.aggregate([
+      {
+        $lookup: {
+          from: 'hospitals',
+          localField: 'hospitalId',
+          foreignField: '_id',
+          as: 'hospital_details',
+        },
+      },
+      {
+        $unwind: {
+          path: '$hospital_details',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+     
+      {
+        $lookup: {
+          from: 'vaccines',
+          localField: 'vaccineId',
+          foreignField: '_id',
+          as: 'vaccine_details',
+        },
+      },
+      {
+        $unwind: {
+          path: '$vaccine_details',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'signups',
+          localField: 'loginId',
+          foreignField: 'loginId',
+          as: 'login_details',
+        },
+      },
+      {
+        $unwind: {
+          path: '$login_details',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(id),
+        },
+      },
+    ]);
+    // console.log(data);
+    res.send({
+      success: true,
+      data: data,
     });
   } catch (e) {
     res.send({

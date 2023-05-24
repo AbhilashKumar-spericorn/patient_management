@@ -12,6 +12,9 @@ const Transactions = () => {
     dispatch(getAllTransactions());
   }, []);
 
+
+  
+
   const { transactionData } = useSelector((e) => e.hospital);
   console.log(transactionData);
 

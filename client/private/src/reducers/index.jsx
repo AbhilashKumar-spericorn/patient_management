@@ -153,7 +153,9 @@ const hospitalInitials = {
   userConsultationData: [],
   registeredConsultations: [],
   transactionData: [],
+  success: null,
   cCertificateInitials : []
+  
 };
 
 const hospitalReducer = (state = hospitalInitials, action) => {
@@ -217,6 +219,7 @@ const hospitalReducer = (state = hospitalInitials, action) => {
         return {
           ...state,
           cCertificateInitials: action.payload,
+          success: action.successStatus,
         };
 
     default:

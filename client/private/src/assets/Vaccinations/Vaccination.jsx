@@ -53,6 +53,14 @@ const Vaccination = () => {
     },
     'dark'
   );
+
+  // set certificate
+  const issueVCertificate = async (id) => {
+    // Perform action for the selected row
+    console.log('Selected Row:', id);
+    dispatch(issueVaccineCertificate(id));
+  };
+
   const columns = [
     {
       name: 'hospital Name',
@@ -88,9 +96,7 @@ const Vaccination = () => {
         <div>
           <button
             className="btn btn-danger"
-            onClick={() => {
-              // dispatch(dltRoute(row.id));
-            }}
+            onClick={() => issueVCertificate(row._id)}
           >
             issue certificate
           </button>
@@ -106,10 +112,12 @@ const Vaccination = () => {
   ) : (
     <div className="container-fluid">
       <div className="row">
-        <Navbar />
-        <div className="col-sm p-3 min-vh-100">
-          <div className="container">
-            <div className="main-body">
+        <div className="col-md-3 p-0">
+          <Navbar />
+        </div>
+        <div className="col-md-9">
+          <div className="p-3 min-vh-100">
+            <div className="mb-3">
               {userRole === 'Patient' ? (
                 <Link to={'/add-vaccinations'} className="btn btn-info">
                   register vaccine

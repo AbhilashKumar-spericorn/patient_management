@@ -59,11 +59,17 @@ export const getAllVaccinations = () => async (dispatch) => {
   }
 };
 
-//to issue vaccine certificate
-export const issueVaccineCertificate = () => async (dispatch) => {
-  const { data } = await postData('/vaccines/issue-certificate');
+//to issue vaccination certificate
+export const issueVaccineCertificate = (id) => async (dispatch) => {
+  const { data } = await postData(`/vaccines/issue-certificate/${id}`);
   if (data.success) {
     // dispatch(setSuccessMessage(data.message));
+    console.log('data.data', data.data);
+    const reducedObject = data.data.reduce((result, obj) => {
+      return { ...result, ...obj };
+    }, {});
+
+    console.log(reducedObject);
   } else {
     dispatch(setErrorMessage(data.message));
   }

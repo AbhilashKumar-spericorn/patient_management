@@ -108,8 +108,17 @@ export const issueConsultationCertificate = (id) => async (dispatch) => {
     dispatch({
       type: 'CONSULTATION_CERTIFICATE',
       payload: reducedObject,
+      successStatus: data.success,
     });
   } else {
     dispatch(setErrorMessage(data.message));
   }
 };
+
+//set certificate
+export const setConsultationCertificate =
+  (props, navigate) => async (dispatch) => {
+    let { data } = await postData('/consultation/certificate', props);
+    console.log(data);
+    dispatch(setSuccessMessage(data.message));
+  };

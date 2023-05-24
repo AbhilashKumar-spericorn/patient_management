@@ -23,7 +23,7 @@ const Navbar = () => {
   //   let permissionAllowed = array?.map((e) => e.subMenu);
 
   return (
-    <div className="col-sm-auto bg-dark sticky-top">
+    <div className="col-sm-auto bg-dark sticky-top min-vh-100">
       <div className="d-flex flex-sm-column flex-row flex-nowrap bg-dark align-items-center sticky-top">
         <a
           href="/dashboard"

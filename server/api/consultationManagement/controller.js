@@ -4,6 +4,7 @@ const doctor = require('../../models/doctor');
 const department = require('../../models/department');
 const hospital = require('../../models/hospital');
 const login = require('../../models/login');
+const consultationCertificate = require('../../models/consultationCertificate');
 const jwt = require('jsonwebtoken');
 const Web3 = require('web3');
 const {
@@ -12,7 +13,8 @@ const {
   stopTask,
 } = require('../../modules/cron/index');
 const transaction = require('../../models/transaction');
-
+const { PDFDocument, StandardFonts } = require('pdf-lib');
+const fs = require('fs');
 // add consultations
 
 exports.addConsultation = async (req, res) => {
@@ -248,7 +250,7 @@ exports.issueCertificate = async (req, res) => {
         },
       },
     ]);
-    console.log(data);
+    // console.log(data);
     res.send({
       success: true,
       data: data,
@@ -260,3 +262,147 @@ exports.issueCertificate = async (req, res) => {
     });
   }
 };
+
+exports.consultationCertificate = async (req, res) => {
+  try {
+    console.log('req.body', req.body);
+    const data = await consultationCertificate.create(req.body);
+    res.send({
+      success: true,
+      message: 'Certificate Generated Successfully',
+    });
+    generatePDF(req.body);
+  } catch (e) {
+    console.log('Error', e);
+    return res.send({
+      success: false,
+      msg: e.message,
+    });
+  }
+};
+
+
+
+const changeConsultationStatus = initiateTask('*/5 * * * * *', async () => {
+  try {
+    const allConsultations = await consultation.find({
+      status: 'pending',
+      date: { $lte: new Date() }, // Filter consultations where the date is less than or equal to the current date
+    });
+    console.log('allConsultations', allConsultations);
+    const currentTime = new Date();
+
+    for (const consultations of allConsultations) {
+      const endTime = calculateEndTime(consultations.time);
+
+      if (currentTime >= endTime) {
+        await consultation.updateOne(
+          { _id: consultations._id },
+          { status: 'completed' }
+        );
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+
+//cron job
+function calculateEndTime(startTime) {
+  const [hour, minute, meridiem] = startTime
+    .match(/^(\d+).(\d+)(\w+)/)
+    .slice(1);
+  let hourValue = parseInt(hour, 10);
+  const isPM = meridiem?.toLowerCase() === 'pm';
+
+  if (isPM && hourValue !== 12) {
+    hourValue += 12;
+  } else if (!isPM && hourValue === 12) {
+    hourValue = 0;
+  }
+
+  const endTime = new Date();
+  endTime.setHours(hourValue + 1, minute || 0, 0);
+  return endTime;
+}
+
+// task start
+if (process.env.CRON && process.env.CRON === 'true') {
+  startTask(changeConsultationStatus, 'changeConsultationStatus');
+}
+
+
+
+async function generatePDF(data) {
+  // Create a new PDF document
+  const pdfDoc = await PDFDocument.create();
+
+  // Add a new page
+  const page = pdfDoc.addPage();
+
+  // Set the font and font size
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  page.setFont(font);
+  page.setFontSize(14);
+
+  // Set the content on the page using the provided data
+  page.drawText('MEDICAL CERTIFICATE', {
+    x: 50,
+    y: page.getHeight() - 50,
+    size: 18,
+    underline: true,
+  });
+
+  page.drawText(`Certificate Number: ${data.certificateNumber}`, {
+    x: 50,
+    y: page.getHeight() - 100,
+    size: 12,
+  });
+
+  page.drawText(`Patient Name: ${data.patientName}`, {
+    x: 50,
+    y: page.getHeight() - 140,
+    size: 12,
+  });
+
+  page.drawText(`Doctor Name: ${data.doctorName}`, {
+    x: 50,
+    y: page.getHeight() - 180,
+    size: 12,
+  });
+
+  page.drawText(`Consultation Time: ${data.consultationTime}`, {
+    x: 50,
+    y: page.getHeight() - 220,
+    size: 12,
+  });
+
+  page.drawText(`Hospital Name: ${data.hospitalName}`, {
+    x: 50,
+    y: page.getHeight() - 260,
+    size: 12,
+  });
+
+  page.drawText(`Issuer Name: ${data.issuerName}`, {
+    x: 50,
+    y: page.getHeight() - 300,
+    size: 12,
+  });
+
+  page.drawText(`Issuer ID: ${data.issuerId}`, {
+    x: 50,
+    y: page.getHeight() - 340,
+    size: 12,
+  });
+
+  page.drawText(`Issued Date and Time: ${data.issuedDateTime}`, {
+    x: 50,
+    y: page.getHeight() - 380,
+    size: 12,
+  });
+
+  // Save the PDF to a file
+  const pdfBytes = await pdfDoc.save();
+  fs.writeFileSync(`consultationCertificate_${data.patientName}.pdf`, pdfBytes);
+}
