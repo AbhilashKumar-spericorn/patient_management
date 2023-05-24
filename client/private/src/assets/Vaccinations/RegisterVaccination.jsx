@@ -12,7 +12,7 @@ import { fetchHospitals } from '../Consultations/action';
 import { getVaccines, registerVaccinations } from './actions';
 import { loaderTrue } from '../../actions';
 import Web3 from 'web3';
-import wrappedTokenDeposit from '../../blockchain/wrappedTokenDeposit';
+import wrappedTokenDeposit from '../../blockchain/ConsultationCertificate';
 
 const FormContainer = styled.div`
   background-color: #222;
@@ -207,16 +207,23 @@ const RegisterVaccination = () => {
 
         <FormField>
           <Label htmlFor="time">Time:</Label>
-          <input
-            type="time"
-            id="time"
+          <select
             name="time"
-            placeholder="Enter Time"
+            className="form-control"
+            id="time"
+            value={formik.values.time}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.time}
-            className="form-control"
-          />
+          >
+            <option value="">Select Time</option>
+            <option value="9:00am-10:00am">9:00am - 10:00am</option>
+            <option value="10:00am-11:00am">10:00am - 11:00am</option>
+            <option value="11:00am-12:00pm">11:00am - 12:00pm</option>
+            <option value="12:00pm-1:00pm">12:00pm - 1:00pm</option>
+            <option value="2:00pm-3:00pm">2:00pm - 3:00pm</option>
+            <option value="3:00pm-4:00pm">3:00pm - 4:00pm</option>
+            <option value="4:00pm-5:00pm">4:00pm - 5:00pm</option>
+          </select>
           {formik.touched.time && formik.errors.time && (
             <ErrorMsg>{formik.errors.time}</ErrorMsg>
           )}

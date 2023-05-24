@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // import { addSwapValues } from '../../components/common/redux/Approval';
 import CONSULTATION_ABI from './WMATIC_ABI';
 let networks;
-const wrappedTokenDeposit = async ({
+const ConsultationCertificate = async ({
   // walletselect,
   address,
   // accountNumber,
@@ -292,4 +292,4 @@ const wrappedTokenDeposit = async ({
   // return result;
 };
 
-export default wrappedTokenDeposit;
+export default ConsultationCertificate;

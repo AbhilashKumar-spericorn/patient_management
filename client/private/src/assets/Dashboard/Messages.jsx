@@ -15,7 +15,7 @@ const Messages = () => {
   }, []);
 
   const { feedbacks } = useSelector((e) => e.msg);
-  console.log('feedbacks', feedbacks)
+  console.log('feedbacks', feedbacks);
 
   createTheme(
     'solarized',
@@ -78,14 +78,20 @@ const Messages = () => {
   return (
     <div className="container-fluid">
       <div className="row">
-        <Navbar />
-        <div className="col-sm p-3 min-vh-100">
-          <DataTable
-            columns={columns}
-            data={feedbacks}
-            pagination
-            theme="solarized"
-          />
+        <div className="col-md-3 p-0">
+          <Navbar />
+        </div>
+        <div className="col-md-9">
+          <div className="p-3 min-vh-100">
+            <div className="mb-3">
+              <DataTable
+                columns={columns}
+                data={feedbacks}
+                pagination
+                theme="solarized"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

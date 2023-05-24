@@ -26,7 +26,6 @@ const Vaccination = () => {
   );
 
   const { loader } = useSelector((e) => e.msg);
-  console.log('loader', loader);
 
   createTheme(
     'solarized',
@@ -57,7 +56,7 @@ const Vaccination = () => {
   // set certificate
   const issueVCertificate = async (id) => {
     // Perform action for the selected row
-    console.log('Selected Row:', id);
+  
     dispatch(issueVaccineCertificate(id));
   };
 
@@ -92,16 +91,19 @@ const Vaccination = () => {
     {
       name: 'Action',
 
-      selector: (row) => (
-        <div>
-          <button
-            className="btn btn-danger"
-            onClick={() => issueVCertificate(row._id)}
-          >
-            issue certificate
-          </button>
-        </div>
-      ),
+      selector: (row) =>
+        row.status === false ? (
+          <div>
+            <button
+              className="btn btn-danger"
+              onClick={() => issueVCertificate(row._id)}
+            >
+              issue certificate
+            </button>
+          </div>
+        ) : (
+          'issued'
+        ),
     },
   ];
 

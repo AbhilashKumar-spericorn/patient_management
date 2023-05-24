@@ -17,16 +17,36 @@ connect(
 const createSeedData = async (req, res) => {
   try {
     const vaccines = [
-      { name: 'Yellow Fever Vaccine' },
-      { name: 'Typhoid Fever Vaccine' },
-      { name: 'Hepatitis A Vaccine' },
-      { name: 'Rabies Vaccine' },
-      { name: 'Cholera Vaccine' },
-      { name: 'Influenza (Flu) Vaccine' },
-      { name: 'Tetanus, Diphtheria, and Pertussis (Tdap) Vaccine' },
-      { name: 'Human Papillomavirus (HPV) Vaccine (for adults)' },
-      { name: 'Japanese Encephalitis Vaccine' },
-      { name: 'Varicella (Chickenpox) Vaccine' },
+      {
+        name: 'Moderna',
+        disease: 'COVID-19',
+        antigen: 'Spike protein of the SARS-CoV-2 virus',
+      },
+      {
+        name: 'Covishield',
+        disease: 'Malaria',
+        antigen: 'Spike protein',
+      },
+      {
+        name: 'Sputnik',
+        disease: 'Influenza',
+        antigen: 'Hemagglutinin and neuraminidase proteins',
+      },
+      {
+        name: 'Novavax',
+        disease: 'Hepatitis B',
+        antigen: 'Hepatitis B surface antigen (HBsAg)',
+      },
+      {
+        name: 'Pfizer-BioNTech',
+        disease: 'COVID-19',
+        antigen: 'Spike protein of the SARS-CoV-2 virus',
+      },
+      {
+        name: 'AstraZeneca',
+        disease: 'COVID-19',
+        antigen: 'Spike protein of the SARS-CoV-2 virus',
+      },
     ];
     const existingDoc = await vaccine.find();
     if (existingDoc >= 0) {

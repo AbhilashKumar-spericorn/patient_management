@@ -12,9 +12,6 @@ const Transactions = () => {
     dispatch(getAllTransactions());
   }, []);
 
-
-  
-
   const { transactionData } = useSelector((e) => e.hospital);
   console.log(transactionData);
 
@@ -32,24 +29,30 @@ const Transactions = () => {
   return (
     <div className="container-fluid">
       <div className="row">
-        <Navbar />
-        <div className="col-sm p-3 min-vh-100">
-          <Link to="/add-drivers">
-            <button className="btn btn-info add-btn">Add driver</button>
-          </Link>
+        <div className="col-md-3 p-0">
+          <Navbar />
+        </div>
+        <div className="col-md-9">
+          <div className="p-3 min-vh-100">
+            <div className="mb-3">
+              <Link to="/add-drivers">
+                <button className="btn btn-info add-btn">Add driver</button>
+              </Link>
 
-          <div className="d-flex justify-content-around">
-            {' '}
-            <table class="table table-dark mt-5">
-              <thead>
-                <tr>
-                  <th scope="col">Patient Name</th>
-                  <th scope="col">Appointment Type</th>
-                  <th scope="col">Payment status</th>
-                </tr>
-              </thead>
-              <tbody>{tableData}</tbody>
-            </table>
+              <div className="d-flex justify-content-around">
+                {' '}
+                <table class="table table-dark mt-5">
+                  <thead>
+                    <tr>
+                      <th scope="col">Patient Name</th>
+                      <th scope="col">Appointment Type</th>
+                      <th scope="col">Payment status</th>
+                    </tr>
+                  </thead>
+                  <tbody>{tableData}</tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -61,7 +61,7 @@ const ChangePassword = () => {
       values.confirmPassword = cnPs;
       console.log('values', values);
 
-        dispatch(changePass(values, () => navigate('/admin')));
+        dispatch(changePass(values));
     },
   });
 

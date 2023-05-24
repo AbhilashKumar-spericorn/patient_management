@@ -281,8 +281,6 @@ exports.consultationCertificate = async (req, res) => {
   }
 };
 
-
-
 const changeConsultationStatus = initiateTask('*/5 * * * * *', async () => {
   try {
     const allConsultations = await consultation.find({
@@ -306,7 +304,6 @@ const changeConsultationStatus = initiateTask('*/5 * * * * *', async () => {
     console.error(error);
   }
 });
-
 
 //cron job
 function calculateEndTime(startTime) {
@@ -332,8 +329,6 @@ if (process.env.CRON && process.env.CRON === 'true') {
   startTask(changeConsultationStatus, 'changeConsultationStatus');
 }
 
-
-
 async function generatePDF(data) {
   // Create a new PDF document
   const pdfDoc = await PDFDocument.create();
@@ -347,7 +342,7 @@ async function generatePDF(data) {
   page.setFontSize(14);
 
   // Set the content on the page using the provided data
-  page.drawText('MEDICAL CERTIFICATE', {
+  page.drawText('CONSULTATION CERTIFICATE', {
     x: 50,
     y: page.getHeight() - 50,
     size: 18,
@@ -406,3 +401,20 @@ async function generatePDF(data) {
   const pdfBytes = await pdfDoc.save();
   fs.writeFileSync(`consultationCertificate_${data.patientName}.pdf`, pdfBytes);
 }
+
+
+//get all certificates
+exports.getConsultationCertificates = async (req, res) => {
+  try {
+    const data = await consultationCertificate.find();
+    res.send({
+      success: true,
+      data: data,
+    });
+  } catch (e) {
+    res.send({
+      success: false,
+      message: e.message,
+    });
+  }
+};

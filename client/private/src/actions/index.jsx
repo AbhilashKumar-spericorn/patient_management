@@ -41,7 +41,7 @@ export const setLogout = (navigate) => async (dispatch) => {
   localStorage.removeItem('currentUser');
   Cookies.remove('token');
   dispatch(setSuccessMessage('Logout successfully'));
-  navigate();
+  // navigate();
   // await service.userLogout();
 };
 
@@ -51,6 +51,7 @@ export const changePass = (props) => async (dispatch) => {
   const { data } = await postData('/profile/change-password', props);
   if (data.success) {
     dispatch(setSuccessMessage(data.message));
+    dispatch(setLogout())
   } else {
     dispatch(setErrorMessage(data.message));
   }

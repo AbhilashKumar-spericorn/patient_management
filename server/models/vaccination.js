@@ -10,8 +10,18 @@ const vaccination = new mongoose.Schema({
     required: false,
     trim: true,
   },
+  time: {
+    type: String,
+    required: false,
+    trim: true,
+  },
   loginId: { type: ObjectId, ref: 'login', trim: true, required: true },
   date: { type: Date, trim: true, required: true },
+  status: {
+    type: String,
+    enum: [true, false],
+    default: true,
+  },
 });
 
 module.exports = mongoose.model('vaccination', vaccination);

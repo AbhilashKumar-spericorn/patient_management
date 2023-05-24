@@ -30,7 +30,6 @@ const Profile = () => {
 
   const { basicData } = useSelector((e) => e.auth);
 
-
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
     setIsReadOnly(true);
@@ -228,7 +227,7 @@ const Profile = () => {
 
                   <p style={{ fontSize: '20px' }}>Gender </p>
                   <p>{e?.medical_info?.gender}</p>
-                  <Link className="btn btn-primary" to={'/edit-medicalinfo'} >
+                  <Link className="btn btn-primary" to={'/edit-medicalinfo'}>
                     Edit data
                   </Link>
                 </div>
@@ -243,10 +242,16 @@ const Profile = () => {
   return (
     <div className="container-fluid">
       <div className="row">
-        <Navbar />
-        <div className="col-sm p-3 min-vh-100">
-          <div className="container">
-            <div className="main-body">{details}</div>
+        <div className="col-md-3 p-0">
+          <Navbar />
+        </div>
+        <div className="col-md-9">
+          <div className="p-3 min-vh-100">
+            <div className="mb-3">
+              <div className="container">
+                <div className="main-body">{details}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

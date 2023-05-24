@@ -103,10 +103,20 @@ const Navbar = () => {
           {userRole === 'Admin' ? (
             <li className="nav-item my-1">
               <Link
-                to={'/permissions'}
+                to={'/issued-cCertificates'}
                 className="nav-link text-white fw-bold fs-4"
               >
-                <i className=" bi bi-lock fs-3"></i> Permissions
+                <i className=" bi bi-lock fs-3"></i>  consultation certifications
+              </Link>
+            </li>
+          ) : null}
+             {userRole === 'Admin' ? (
+            <li className="nav-item my-1">
+              <Link
+                to={'/issued-VCertificates'}
+                className="nav-link text-white fw-bold fs-4"
+              >
+                <i className=" bi bi-lock fs-3"></i>  vaccination certifications
               </Link>
             </li>
           ) : null}

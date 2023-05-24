@@ -64,7 +64,6 @@ const msgInitials = {
   feedbacks: [],
   feedback: '',
   loader: false,
-
 };
 
 const msgReducer = (state = msgInitials, action) => {
@@ -89,16 +88,16 @@ const msgReducer = (state = msgInitials, action) => {
         ...state,
         feedback: action.payload,
       };
-      case 'LOADER_TRUE':
-        return {
-          ...state,
-          loader: true,
-        };
-      case 'LOADER_FALSE':
-        return {
-          ...state,
-          loader: false,
-        };
+    case 'LOADER_TRUE':
+      return {
+        ...state,
+        loader: true,
+      };
+    case 'LOADER_FALSE':
+      return {
+        ...state,
+        loader: false,
+      };
 
     default:
       return state;
@@ -154,8 +153,9 @@ const hospitalInitials = {
   registeredConsultations: [],
   transactionData: [],
   success: null,
-  cCertificateInitials : []
-  
+  cCertificateInitials: [],
+  consultationCertificates: [],
+  vaccinationCertificates: [],
 };
 
 const hospitalReducer = (state = hospitalInitials, action) => {
@@ -215,11 +215,21 @@ const hospitalReducer = (state = hospitalInitials, action) => {
         ...state,
         transactionData: action.payload,
       };
-      case 'CONSULTATION_CERTIFICATE':
+    case 'CONSULTATION_CERTIFICATE':
+      return {
+        ...state,
+        cCertificateInitials: action.payload,
+        success: action.successStatus,
+      };
+      case 'SET_CONSULTATION_CERTIFICATES':
+      return {
+        ...state,
+        consultationCertificates: action.payload,
+      };
+      case 'SET_VACCINATION_CERTIFICATES':
         return {
           ...state,
-          cCertificateInitials: action.payload,
-          success: action.successStatus,
+          vaccinationCertificates: action.payload,
         };
 
     default:

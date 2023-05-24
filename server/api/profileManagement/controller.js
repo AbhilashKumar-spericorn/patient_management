@@ -2,6 +2,7 @@ const login = require('../../models/login');
 const signup = require('../../models/signup');
 const medicalDetails = require('../../models/medicalDetails');
 const jwt = require('jsonwebtoken');
+const CryptoJS = require('crypto-js')
 
 //change password
 
@@ -16,7 +17,6 @@ exports.changePassword = async (req, res) => {
     'XkhZG4fW2t2W'
   );
   const currentPassword = decrypted.toString(CryptoJS.enc.Utf8);
-
   const newPassword = decrypted2.toString(CryptoJS.enc.Utf8);
   const confirmPassword = decrypted3.toString(CryptoJS.enc.Utf8);
 
@@ -28,30 +28,30 @@ exports.changePassword = async (req, res) => {
   let who = await login.findById(decoded.id);
 
   if (!who) {
-    errorMessage(res, 'You dont have the permission to change the password');
+    return errorMessage(res, 'You do not have permission to change the password');
   }
-  const VerifyPassword = await login.verifyPassword(
+
+  const verifyPassword = await login.verifyPassword(
     currentPassword,
     who.password,
     who.salt
   );
 
-  if (!VerifyPassword) {
-    return errorMessage(res, 'You entered the Wrong Password');
+  if (!verifyPassword) {
+    return errorMessage(res, 'You entered the wrong password');
   } else {
     const salt = await login.generateSalt();
-    const Password = await login.hashPassword(newPassword, salt);
-    await login.update(
-      { salt: salt, password: Password },
-      { where: { id: who.id } }
+    const hashedPassword = await login.hashPassword(newPassword, salt);
+    await login.findOneAndUpdate(
+      { _id: who.id },
+      { $set: { salt: salt, password: hashedPassword } }
     );
     res.send({
       success: true,
-      message: 'password changed successfully',
+      message: 'Password changed successfully',
     });
   }
 };
-
 //report disease
 exports.reportDisease = async (req, res) => {
   try {

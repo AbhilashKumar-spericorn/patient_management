@@ -11,6 +11,8 @@ import ReportOfDiseases from './Diseases/ReportOfDiseases';
 import AddDisease from './Diseases/AddDisease';
 import Consultation from './Consultations/Consultation';
 import RegisterConsultations from './Consultations/RegisterConsultations';
+import ConsultationCertficates from './Dashboard/ConsultationCertficates';
+import VaccinationCertificates from './Dashboard/VaccinationCertificates';
 import Vaccination from './Vaccinations/Vaccination';
 import RegisterVaccination from './Vaccinations/RegisterVaccination';
 import Transactions from './Transactions/Transactions';
@@ -58,21 +60,126 @@ const App = () => {
           <Route path="/" element={<Home />} />;
           <Route path="/login" element={<Login />} />;
           <Route path="/register" element={<Registration />} />;
-          <Route path="/dashboard" element={<Dashboard />} />;
-          <Route path="/profile" element={<Profile />} />;
-          <Route path="/edit-medicalinfo" element={<EditMedInfo />} />;
-
-          <Route path="/messages" element={<Messages />} />;
-          <Route path="/change-password" element={<ChangePassword />} />;
-          <Route path="/diseases" element={<ReportOfDiseases />} />;
-          <Route path="/add-disease" element={<AddDisease />} />;
-          <Route path="/consultation" element={<Consultation />} />;
-          <Route path="/read-feedback/:id" element={<ReadMessage />} />
-          <Route path="/vaccinations" element={<Vaccination />} />
-          <Route path="/add-vaccinations" element={<RegisterVaccination />} />
-          <Route path="/transactions" element={<Transactions />} />
-
-
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          ;
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+          ;
+          <Route
+            path="/edit-medicalinfo"
+            element={
+              <PrivateRoute>
+                <EditMedInfo />
+              </PrivateRoute>
+            }
+          />
+          ;
+          <Route
+            path="/messages"
+            element={
+              <PrivateRoute>
+                <Messages />
+              </PrivateRoute>
+            }
+          />
+          ;
+          <Route
+            path="/change-password"
+            element={
+              <PrivateRoute>
+                <ChangePassword />
+              </PrivateRoute>
+            }
+          />
+          ;
+          <Route
+            path="/diseases"
+            element={
+              <PrivateRoute>
+                <ReportOfDiseases />
+              </PrivateRoute>
+            }
+          />
+          ;
+          <Route
+            path="/add-disease"
+            element={
+              <PrivateRoute>
+                <AddDisease />
+              </PrivateRoute>
+            }
+          />
+          ;
+          <Route
+            path="/consultation"
+            element={
+              <PrivateRoute>
+                <Consultation />
+              </PrivateRoute>
+            }
+          />
+          ;
+          <Route
+            path="/read-feedback/:id"
+            element={
+              <PrivateRoute>
+                <ReadMessage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/vaccinations"
+            element={
+              <PrivateRoute>
+                <Vaccination />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/add-vaccinations"
+            element={
+              <PrivateRoute>
+                <RegisterVaccination />
+              </PrivateRoute>
+            }
+          />
+           <Route
+            path="/issued-cCertificates"
+            element={
+              <PrivateRoute>
+                <ConsultationCertficates />
+              </PrivateRoute>
+            }
+          />
+           <Route
+            path="/issued-VCertificates"
+            element={
+              <PrivateRoute>
+                <VaccinationCertificates />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/transactions"
+            element={
+              <PrivateRoute>
+                <Transactions />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </div>

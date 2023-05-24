@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 import Web3 from 'web3';
 import Loader from '../Loader';
-import wrappedTokenDeposit from '../../blockchain/wrappedTokenDeposit';
+import wrappedTokenDeposit from '../../blockchain/ConsultationCertificate';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
@@ -77,39 +77,6 @@ const Consultation = () => {
     // Perform action for the selected row
     console.log('Selected Row:', id);
     dispatch(issueConsultationCertificate(id));
-
-    if (success) {
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const web3 = new Web3(window.ethereum);
-      const accounts = await web3.eth.getAccounts();
-      const netVer = await web3.eth.net.getId();
-      localStorage.setItem('walletAddress', accounts[0]);
-
-      const certificationValues = {
-        patientName: cCertificateInitials?.login_details?.name,
-        patientUUID: JSON.stringify(
-          cCertificateInitials?.login_details?.aadharNo
-        ),
-        patientRegId: cCertificateInitials?.loginId,
-        doctorName: cCertificateInitials?.doctor_details?.doctorName,
-        consultationTime: cCertificateInitials?.time,
-        departmentName:
-          cCertificateInitials?.department_details?.departmentName,
-        hospitalName: cCertificateInitials?.hospital_details?.hospitalName,
-        issuerName: cCertificateInitials?.hospital_details?.hospitalName,
-        issuerId: cCertificateInitials?.hospitalId,
-        issuedDateTime: Math.floor(new Date().getTime() / 1000.0),
-      };
-      console.log('certificationValuesMainPage', certificationValues);
-      const wrapper = await wrappedTokenDeposit({
-        web3,
-        address: accounts[0],
-        netVer,
-        certificationValues,
-      });
-      console.log('wrapper', wrapper);
-      dispatch(setConsultationCertificate(wrapper));
-    }
   };
 
   // data table value mapping
@@ -162,7 +129,9 @@ const Consultation = () => {
               issue certificate
             </button>
           </div>
-        ) : 'issued',
+        ) : (
+          'issued'
+        ),
     },
   ];
 
@@ -334,41 +303,146 @@ const Consultation = () => {
     <Loader />
   ) : (
     <div className="container-fluid">
-    <div className="row">
-      <div className="col-md-3 p-0">
-        <Navbar />
-      </div>
-      <div className="col-md-9">
-        <div className="p-3 min-vh-100">
-          <div className="mb-3">
-            {userRole === 'Patient' && (
-              <button className="btn btn-info add-btn" onClick={toggleModal}>
-                Register
-              </button>
-            )}
-            <div className="mt-5">
+      <div className="row d-flex flex-row">
+        <div className="col-md-3 p-0">
+          <Navbar />
+        </div>
+        <div className="col-md-9">
+          <div className="p-3 min-vh-100">
+            <div className="mb-3">
               {userRole === 'Patient' ? (
-                <DataTable
-                  columns={columns}
-                  data={userConsultationData}
-                  pagination
-                  theme="solarized"
-                />
-              ) : (
-                <DataTable
-                  columns={columns2}
-                  data={registeredConsultations}
-                  pagination
-                  theme="solarized"
-                />
-              )}
+                <button className="btn btn-info add-btn" onClick={toggleModal}>
+                  Register
+                </button>
+              ) : null}
+              <div className="mt-5 ">
+                {userRole === 'Patient' ? (
+                  <DataTable
+                    columns={columns}
+                    data={userConsultationData}
+                    pagination
+                    theme="solarized"
+                  />
+                ) : (
+                  <DataTable
+                    columns={columns2}
+                    data={registeredConsultations}
+                    pagination
+                    theme="solarized"
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={toggleModal}
+        shouldCloseOnOverlayClick={true} // Prevent closing on overlay click
+        shouldCloseOnEsc={false} // Prevent closing on Esc key
+        contentLabel="Register Modal"
+        className="custom-modal" // Add a custom class for the modal
+        overlayClassName="custom-modal-overlay" // Add a custom class for the modal overlay
+      >
+        <div className="container">
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label>Date:</label>
+              <input
+                type="date"
+                name="date"
+                id="date"
+                value={values.date}
+                className="form-control"
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              {errors.date && touched.date ? <div>{errors.date}</div> : null}
+            </div>
+            <div>
+              <label>Choose Hospital:</label>
+              <select
+                name="hospital"
+                id="hospital"
+                // value={formData.hospital}
+                onChange={handleChange1}
+                className="form-control"
+                onBlur={handleBlur}
+              >
+                <option value="">Select Hospital</option>
+                {hospitalData}
+              </select>
+              {errors.hospital && touched.hospital ? (
+                <div>{errors.hospital}</div>
+              ) : null}
+            </div>
+            <div>
+              <label>Choose Department:</label>
+              <select
+                name="department"
+                // value={formData.department}
+                className="form-control"
+                onChange={handleChange1}
+                onBlur={handleBlur}
+                id="department"
+              >
+                <option value="">Select Department</option>
+                {departmentData}
+              </select>
+              {errors.department && touched.department ? (
+                <div>{errors.department}</div>
+              ) : null}
+            </div>
+            <div>
+              <label>Choose Doctor:</label>
+              <select
+                name="doctor"
+                id="doctor"
+                className="form-control"
+                value={values.doctor}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              >
+                <option value="">Select Doctor</option>
+                {doctorData}
+              </select>
+              {errors.doctor && touched.doctor ? (
+                <div>{errors.doctor}</div>
+              ) : null}
+            </div>
+            <div>
+              <label>Time:</label>
+              <select
+                name="time"
+                className="form-control"
+                id="time"
+                value={values.time}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              >
+                <option value="">Select Time</option>
+                <option value="9:00am-10:00am">9:00am - 10:00am</option>
+                <option value="10:00am-11:00am">10:00am - 11:00am</option>
+                <option value="11:00am-12:00pm">11:00am - 12:00pm</option>
+                <option value="12:00pm-1:00pm">12:00pm - 1:00pm</option>
+                <option value="2:00pm-3:00pm">2:00pm - 3:00pm</option>
+                <option value="3:00pm-4:00pm">3:00pm - 4:00pm</option>
+                <option value="4:00pm-5:00pm">4:00pm - 5:00pm</option>
+              </select>
+              {errors.time && touched.time ? <div>{errors.time}</div> : null}
+            </div>
+            <button type="submit" className="btn btn-primary mt-5">
+              Submit
+            </button>
+            {/* <button className="btn btn-dark mt-5 mx-2" onClick={toggleModal}>
+              back
+            </button> */}
+          </form>
+        </div>
+      </Modal>
     </div>
-  </div>
-  
   );
 };
 
