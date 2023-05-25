@@ -52,6 +52,16 @@ const Navbar = () => {
               <i className="bi-house fs-3"></i> Profile
             </Link>
           </li>
+          {userRole === 'Admin' ? (
+            <li className="nav-item my-1">
+              <Link
+                to={'/patients'}
+                className="nav-link text-white fw-bold fs-4"
+              >
+                <i className=" bi bi-lock fs-3"></i>  Patients 
+              </Link>
+            </li>
+          ) : null}
           {userRole === 'Patient' ? (
             <li className="nav-item my-1 ">
               <Link

@@ -4,6 +4,7 @@ import Login from './authentication/Login';
 import Registration from './authentication/Registration';
 import Dashboard from './Dashboard/Dashboard';
 import Profile from './Dashboard/Profile';
+import PatientList from './Dashboard/PatientList';
 import Messages from './Dashboard/Messages';
 import ReadMessage from './Dashboard/ReadMessage';
 import EditMedInfo from './Dashboard/EditMedInfo';
@@ -74,6 +75,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <Profile />
+              </PrivateRoute>
+            }
+          />
+           <Route
+            path="/patients"
+            element={
+              <PrivateRoute>
+                <PatientList />
               </PrivateRoute>
             }
           />
