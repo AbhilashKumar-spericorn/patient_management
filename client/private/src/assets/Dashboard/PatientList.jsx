@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../Dashboard/Navbar';
 import { useDispatch, useSelector } from 'react-redux';
 import DataTable, { createTheme } from 'react-data-table-component';
@@ -6,6 +6,8 @@ import { getAllPatients } from '../../actions';
 import moment from 'moment';
 
 const PatientList = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllPatients());
@@ -39,6 +41,11 @@ const PatientList = () => {
 
   const { patients } = useSelector((e) => e.hospital);
   console.log('patient', patients);
+
+  const filteredPatients = patients.filter((patient) =>
+    patient.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const columns = [
     {
       name: ' Id',
@@ -49,18 +56,22 @@ const PatientList = () => {
       selector: (row) => row?.name,
     },
     {
-      name: 'Date of Birth ',
+      name: 'Date of Birth',
       selector: (row) => moment(row?.dob).format('DD-MM-YYYY'),
     },
     {
-      name: ' Phone Number',
+      name: 'Phone Number',
       selector: (row) => row?.phoneNumber,
     },
     {
-      name: ' state',
+      name: 'State',
       selector: (row) => row?.state,
     },
   ];
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
   return (
     <div className="container-fluid">
@@ -70,17 +81,17 @@ const PatientList = () => {
         </div>
         <div className="col-md-9">
           <div className="p-3 min-vh-100">
-            {/* <div className="mb-3">
-            {userRole === 'Patient' ? (
-              <Link to={'/add-vaccinations'} className="btn btn-info">
-                register vaccine
-              </Link>
-            ) : null}
-          </div> */}
             <div className="mt-5">
+              <input
+                type="text"
+                className='form-control w-25 mb-4'
+                value={searchQuery}
+                onChange={handleSearch}
+                placeholder="Search by name"
+              />
               <DataTable
                 columns={columns}
-                data={patients}
+                data={filteredPatients}
                 pagination
                 theme="solarized"
               />
