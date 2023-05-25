@@ -8,6 +8,7 @@ import { getAllTransactions } from './action';
 
 const Transactions = () => {
   const dispatch = useDispatch();
+  const [filteredTransaction, setFilteredTransaction] = useState([]);
   useEffect(() => {
     dispatch(getAllTransactions());
   }, []);
@@ -15,7 +16,20 @@ const Transactions = () => {
   const { transactionData } = useSelector((e) => e.hospital);
   console.log(transactionData);
 
-  const tableData = transactionData?.map((data, index) => {
+  const handleFilter = (e) => {
+    const value = e.target.value;
+    if (value === 'all') {
+      setFilteredTransaction(transactionData);
+    } else {
+      const filtered = transactionData.filter(
+        (item) => item.appointmentType.toLowerCase() === value.toLowerCase()
+      );
+      setFilteredTransaction(filtered);
+    }
+  };
+ 
+  
+  const tableData =   filteredTransaction.length > 0 ? (  filteredTransaction?.map((data, index) => {
     return (
       <tr>
         <td>{data?.user_details?.name}</td>
@@ -24,7 +38,19 @@ const Transactions = () => {
         <td>{data?.status}</td>
       </tr>
     );
-  });
+  })
+  ): (
+    transactionData?.map((data, index) => {
+      return (
+        <tr>
+          <td>{data?.user_details?.name}</td>
+          <td>{data?.appointmentType}</td>
+  
+          <td>{data?.status}</td>
+        </tr>
+      );
+    })
+  )
 
   return (
     <div className="container-fluid">
@@ -38,7 +64,21 @@ const Transactions = () => {
               <Link to="/add-drivers">
                 <button className="btn btn-info add-btn">Add driver</button>
               </Link>
-
+              <div className="filter-container " style={{ margin: '3rem' }}>
+                <label htmlFor="appointmentFilter" className="h4">
+                  Filter by Appointment Type:
+                </label>
+                <select
+                  id="appointmentFilter"
+                  onChange={handleFilter}
+                  className="border-black-3"
+                >
+                  <option value="all">All</option>
+                  <option value="consultation">consultation</option>
+                  <option value="vaccination">vaccination</option>
+                 
+                </select>
+              </div>
               <div className="d-flex justify-content-around">
                 {' '}
                 <table class="table table-dark mt-5">
